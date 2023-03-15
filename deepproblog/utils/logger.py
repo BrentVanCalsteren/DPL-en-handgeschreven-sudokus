@@ -4,7 +4,7 @@ from typing import Dict, Any, List, Union, Iterable
 
 import numpy as np
 
-from deepproblog.src.deepproblog.utils import check_path, split
+from deepproblog.utils import check_path, split
 
 
 class Logger(object):

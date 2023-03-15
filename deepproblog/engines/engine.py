@@ -5,11 +5,11 @@ from problog.formula import LogicFormula
 from problog.logic import Term, Constant
 from problog.program import LogicProgram
 
-from deepproblog.src.deepproblog.query import Query
-from deepproblog.src.deepproblog.tensor import TensorStore
+from deepproblog.query import Query
+from deepproblog.tensor import TensorStore
 
 if TYPE_CHECKING:
-    from deepproblog.src.deepproblog.model import Model
+    from deepproblog.model import Model
 
 
 class Engine(object):

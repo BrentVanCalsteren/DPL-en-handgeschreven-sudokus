@@ -3,10 +3,10 @@ from typing import Callable, TYPE_CHECKING
 import torch
 from problog.logic import Term, Constant, is_list, term2list
 
-from deepproblog.src.deepproblog.engines import Engine
+from deepproblog.engines import Engine
 
 if TYPE_CHECKING:
-    from deepproblog.src.deepproblog.model import Model
+    from deepproblog.model import Model
 
 
 def embed(engine: Engine, term: Term):

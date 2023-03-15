@@ -2,12 +2,12 @@ import signal
 import time
 from typing import List, Callable, Union
 
-from deepproblog.src.deepproblog.dataset import DataLoader
-from deepproblog.src.deepproblog.model import Model
-from deepproblog.src.deepproblog.query import Query
-from deepproblog.src.deepproblog.utils.logger import Logger
-from deepproblog.src.deepproblog.utils.stop_condition import EpochStop
-from deepproblog.src.deepproblog.utils.stop_condition import StopCondition
+from deepproblog.dataset import DataLoader
+from deepproblog.model import Model
+from deepproblog.query import Query
+from deepproblog.utils.logger import Logger
+from deepproblog.utils.stop_condition import EpochStop
+from deepproblog.utils.stop_condition import StopCondition
 
 
 class TrainObject(object):

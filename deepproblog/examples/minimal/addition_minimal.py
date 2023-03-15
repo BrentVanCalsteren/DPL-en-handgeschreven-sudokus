@@ -1,11 +1,11 @@
 import torch
 
 from data import MNISTImages, AdditionDataset
-from deepproblog.src.deepproblog.dataset import DataLoader
-from deepproblog.src.deepproblog.engines import ExactEngine
-from deepproblog.src.deepproblog.model import Model
-from deepproblog.src.deepproblog.network import Network
-from deepproblog.src.deepproblog.train import train_model
+from deepproblog.dataset import DataLoader
+from deepproblog.engines import ExactEngine
+from deepproblog.model import Model
+from deepproblog.network import Network
+from deepproblog.train import train_model
 from network import MNIST_Net
 
 network = MNIST_Net()

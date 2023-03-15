@@ -6,7 +6,7 @@ from problog.evaluator import Semiring as ProbLogSemiring
 from problog.formula import LogicFormula
 from problog.logic import Term
 
-from deepproblog.src.deepproblog.query import Query
+from deepproblog.query import Query
 
 
 class Semiring(ProbLogSemiring, ABC):

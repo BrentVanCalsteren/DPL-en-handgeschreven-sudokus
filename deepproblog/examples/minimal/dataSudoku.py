@@ -9,8 +9,8 @@ from problog.logic import Term, Constant, list2term
 
 from torchvision.datasets import MNIST
 
-from deepproblog.src.deepproblog.dataset import Dataset
-from deepproblog.src.deepproblog.query import Query
+from deepproblog.dataset import Dataset
+from deepproblog.query import Query
 
 transform = transforms.Compose(
     [transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))]

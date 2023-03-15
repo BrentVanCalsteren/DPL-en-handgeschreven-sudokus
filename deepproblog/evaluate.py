@@ -2,9 +2,9 @@ from collections import defaultdict
 from statistics import mean
 from typing import Optional
 
-from deepproblog.src.deepproblog.dataset import Dataset
-from deepproblog.src.deepproblog.model import Model
-from deepproblog.src.deepproblog.utils.confusion_matrix import ConfusionMatrix
+from deepproblog.dataset import Dataset
+from deepproblog.model import Model
+from deepproblog.utils.confusion_matrix import ConfusionMatrix
 
 
 def get_confusion_matrix(

@@ -24,7 +24,7 @@ import torch
 from problog.logic import term2list, Term, Clause, Constant, InstantiationError, Or
 from problog.program import PrologString, PrologFile, SimpleProgram, LogicProgram
 
-from deepproblog.src.deepproblog.engines.builtins import register_tensor_predicates
+from deepproblog.engines.builtins import register_tensor_predicates
 from .dataset import Dataset, ImageDataset
 from .embeddings import TermEmbedder
 from .engines import Engine

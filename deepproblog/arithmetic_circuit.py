@@ -5,11 +5,11 @@ from problog.formula import LogicDAG, LogicFormula
 from problog.logic import Term, term2list
 from problog.sdd_formula import SDD
 
-from deepproblog.src.deepproblog.semiring import Result
-from deepproblog.src.deepproblog.semiring import Semiring
+from deepproblog.semiring import Result
+from deepproblog.semiring import Semiring
 
 if TYPE_CHECKING:
-    from deepproblog.src.deepproblog.model import Model
+    from deepproblog.model import Model
 
 
 class ArithmeticCircuit(object):

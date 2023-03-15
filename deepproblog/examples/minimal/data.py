@@ -5,8 +5,8 @@ import torchvision
 import torchvision.transforms as transforms
 from problog.logic import Term, Constant
 
-from deepproblog.src.deepproblog.dataset import Dataset
-from deepproblog.src.deepproblog.query import Query
+from deepproblog.dataset import Dataset
+from deepproblog.query import Query
 
 transform = transforms.Compose(
     [transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))]

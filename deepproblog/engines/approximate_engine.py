@@ -11,20 +11,20 @@ from problog.logic import (
 from problog.program import SimpleProgram
 from pyswip import Variable, registerForeign
 
-from deepproblog.src.deepproblog.engines.engine import Engine
-from deepproblog.src.deepproblog.engines.prolog_engine import (
+from deepproblog.engines.engine import Engine
+from deepproblog.engines.prolog_engine import (
     PrologEngine,
     pyswip_to_term,
     term_to_pyswip,
 )
-from deepproblog.src.deepproblog.engines.prolog_engine.heuristics import (
+from deepproblog.engines.prolog_engine.heuristics import (
     GeometricMean,
     PartialProbability,
     Heuristic,
     LearnedHeuristic,
 )
-from deepproblog.src.deepproblog.engines.prolog_engine.swi_program import SWIProgram
-from deepproblog.src.deepproblog.tensor import TensorStore
+from deepproblog.engines.prolog_engine.swi_program import SWIProgram
+from deepproblog.tensor import TensorStore
 
 
 def wrap_tensor(x, store: TensorStore):

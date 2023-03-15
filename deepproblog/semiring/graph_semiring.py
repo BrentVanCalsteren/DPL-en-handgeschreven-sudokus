@@ -3,8 +3,8 @@ from typing import Optional
 
 import torch
 
-from deepproblog.src.deepproblog.optimizer import Optimizer
-from deepproblog.src.deepproblog.semiring import Semiring, Result
+from deepproblog.optimizer import Optimizer
+from deepproblog.semiring import Semiring, Result
 from problog.logic import Constant, Term
 
 

@@ -8,7 +8,7 @@ import problog
 from PIL import Image
 from problog.logic import Term, Constant
 
-from deepproblog.src.deepproblog.query import Query
+from deepproblog.query import Query
 
 
 class Dataset(ABC):

@@ -17,8 +17,8 @@ from problog.logic import (
 )
 from problog.program import SimpleProgram
 
-from deepproblog.src.deepproblog.engines.engine import Engine
-from deepproblog.src.deepproblog.network import Network
+from deepproblog.engines.engine import Engine
+from deepproblog.network import Network
 
 # EXTERN = '{}_extern_'
 EXTERN = "{}_extern_nocache_"

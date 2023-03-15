@@ -3,7 +3,7 @@ from os import PathLike
 from pathlib import Path
 from typing import Callable, Generic, Hashable, TypeVar, Union
 
-from deepproblog.src.deepproblog.utils import check_path
+from deepproblog.utils import check_path
 
 K = TypeVar("K")
 T = TypeVar("T")

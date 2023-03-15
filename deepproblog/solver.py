@@ -4,15 +4,15 @@ from typing import Type, TYPE_CHECKING, Optional, List, Sequence
 from problog.formula import LogicFormula
 from problog.logic import Term
 
-from deepproblog.src.deepproblog.arithmetic_circuit import ArithmeticCircuit
-from deepproblog.src.deepproblog.engines import Engine
-from deepproblog.src.deepproblog.query import Query
-from deepproblog.src.deepproblog.semiring import Result
-from deepproblog.src.deepproblog.semiring.graph_semiring import GraphSemiring, Semiring
-from deepproblog.src.deepproblog.utils.cache import Cache
+from deepproblog.arithmetic_circuit import ArithmeticCircuit
+from deepproblog.engines import Engine
+from deepproblog.query import Query
+from deepproblog.semiring import Result
+from deepproblog.semiring.graph_semiring import GraphSemiring, Semiring
+from deepproblog.utils.cache import Cache
 
 if TYPE_CHECKING:
-    from deepproblog.src.deepproblog.model import Model
+    from deepproblog.model import Model
 
 
 class SolverException(Exception):
