@@ -42,7 +42,7 @@ def replaceWithRandomIndex(sudoku, size, subsets):
 
 
 def link2MnistFoto(sudokus, size):
-    subsets = data.getSubsetMnistlabels("train", size)
+    subsets = data.label_indexes["train"]
     a = list()
     for sudoku in sudokus:
         a.append(replaceWithRandomIndex(sudoku, size, subsets))

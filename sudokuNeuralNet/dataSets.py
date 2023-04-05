@@ -15,7 +15,7 @@ global datasets; datasets = {
     ),
 }
 
-def getSubsetMnistlabels(subset, size):
+def getSubsetsMnistlabels(subset, size):
     l = list()
     temp = list()
     for j in range(1, size + 1):
@@ -26,9 +26,19 @@ def getSubsetMnistlabels(subset, size):
         temp = list()
     return l
 
+def saveSubsets(name, subsets):
+    jsonStr = json.dumps(subsets)
+    jsonFile = open("sudokuNeuralNet/sdata/"+ name + ".json", "w")
+    jsonFile.write(jsonStr)
+    jsonFile.close()
+
+
 def open_json(name):
     return json.loads(open(name + ".json", "r").read())
 
+global label_indexes; label_indexes = {
+    "train": open_json("sudokuNeuralNet/sdata/trainIndex"),
+}
 
 global sudoku_datasets; sudoku_datasets = {
     "train": open_json("sudokuNeuralNet/sdata/strain"),
