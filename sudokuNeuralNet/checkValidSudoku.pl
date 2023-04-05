@@ -19,8 +19,9 @@ convertDigits([L|Sudoku],[O|Out],[C|Converted]):-
     convertDigit(L,O,C), convertDigits(Sudoku, Out, Converted).
 
 convertDigit([],[],[]).
-convertDigit([El|L],[O|Out],[C|Co]):- convertFoto(El,C), C = O, convertDigit(L,Out,Co).
-
+convertDigit([El|L],[C|Out],[C|Co]):- convertFoto(El,C), convertDigit(L,Out,Co).
+convertDigit([El|L],[O|Out]):- El \= empty, convertFoto(El,C), convertDigit(L,Out).
+convertDigit([empty|L],[O|Out]):- convertDigit(L,Out).
 
 %the easy checks
 basicChecks(Sudoku,L,Root):-
@@ -31,7 +32,7 @@ basicChecks(Sudoku,L,Root):-
     Root =:= Sqr.
 
 %checks length of list
-checkLength(L,List):- length(List,L1),L1 = L.
+checkLength(L,List):- length(List,L).
 
 %the harder checks
 harderChecks(Sudoku,L,Rood):-
@@ -124,8 +125,8 @@ getSubL(Start,End,List,SubL):- getSubLB(Start,End,List,[],SubL).
 getSubLB(Start,End,_List,SubL,SubL):-
     Start >= End.
 getSubLB(Start,End,List,Buffer,SubL):-
-    Start < End, Inc is Start + 1
-    ,nth0(Start, List, R),
+    Start < End, Inc is Start + 1,
+    nth0(Start, List, R),
     getSubLB(Inc,End,List,[R|Buffer],SubL).
 %------------------------------------------------------------
 

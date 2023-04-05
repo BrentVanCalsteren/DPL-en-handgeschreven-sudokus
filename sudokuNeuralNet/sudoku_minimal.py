@@ -1,13 +1,13 @@
 import torch
 
 
-from dataSudoku import MNISTImages, SudokuDataset
+from sudokuNeuralNet.dataSudoku import MNISTImages, SudokuDataset
 from deepproblog.dataset import DataLoader
 from deepproblog.engines import ExactEngine
 from deepproblog.model import Model
 from deepproblog.network import Network
 from deepproblog.train import train_model
-from network import MNIST_Net
+from torchNet import MNIST_Net
 
 network = MNIST_Net()
 net = Network(network, "mnist_net", batching=True)

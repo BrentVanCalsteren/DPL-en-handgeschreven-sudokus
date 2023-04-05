@@ -1,55 +1,17 @@
 import random
-import json
 from typing import Mapping, Iterator
 import ast
 import torch
-import torchvision
-import torchvision.transforms as transforms
 from problog.logic import Term, Constant, list2term
-
-from torchvision.datasets import MNIST
-
 from deepproblog.dataset import Dataset
 from deepproblog.query import Query
 
-transform = transforms.Compose(
-    [transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))]
-)
 
-datasets = {
-    "train": torchvision.datasets.MNIST(
-        root='data/', train=True, download=True, transform=transform
-    ),
-    "test": torchvision.datasets.MNIST(
-        root='data/', train=False, download=True, transform=transform
-    ),
-}
-def getMnistlabels(subset):
-    l = list()
-    l1 = list()
-    l2 = list()
-    l3 = list()
-    l4 = list()
-    for i in range(len(datasets[subset])):
-        match datasets[subset][i][1]:
-            case 1:
-                l1.append(i)
-            case 2:
-                l2.append(i)
-            case 3:
-                l3.append(i)
-            case 4:
-                l4.append(i)
-    l.append(l1)
-    l.append(l2)
-    l.append(l3)
-    l.append(l4)
-    return l
 
-labelsIndex = {
-    "sdata/strain.csv": getMnistlabels("train"),
-    "sdata/stest.csv": getMnistlabels("test")
-}
+
+
+
+
 
 def convert2randomIndex(suk2, allLabels):
     a = list()
@@ -67,10 +29,7 @@ def convert2randomIndex(suk2, allLabels):
                     b.append(random.choice(allLabels[3]))
         a.append(b)
     return a
-def open_json(name):
-    jsonFile = open(name + ".json", "r")
-    jsonContent = jsonFile.read()
-    return json.loads(jsonContent)
+
 
 #method for converting and processing cvg 2 json
 def opencvg_convert2json(name):
@@ -89,10 +48,7 @@ def opencvg_convert2json(name):
     jsonFile.close()
     return l
 
-sudoku_datasets = {
-    "train": open_json("sdata/strain"),
-    "test": open_json("sdata/stest")
-}
+
 
 
 def getSudokuOnIndexData(subset, index):
