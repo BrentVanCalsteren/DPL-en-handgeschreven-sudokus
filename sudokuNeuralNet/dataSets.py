@@ -2,19 +2,13 @@ import torchvision
 import torchvision.transforms as transforms
 import json
 
+"""
+Help functions for loading datasets correctly
+"""
+
 transform = transforms.Compose(
     [transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))]
 )
-
-global datasets; datasets = {
-    "train": torchvision.datasets.MNIST(
-        root='data/', train=True, download=True, transform=transform
-    ),
-    "test": torchvision.datasets.MNIST(
-        root='data/', train=False, download=True, transform=transform
-    ),
-}
-
 def getSubsetsMnistlabels(subset, size):
     l = list()
     temp = list()
@@ -35,6 +29,21 @@ def saveSubsets(name, subsets):
 
 def open_json(name):
     return json.loads(open(name + ".json", "r").read())
+
+"""
+Global DataSets
+"""
+
+
+global datasets; datasets = {
+    "train": torchvision.datasets.MNIST(
+        root='data/', train=True, download=True, transform=transform
+    ),
+    "test": torchvision.datasets.MNIST(
+        root='data/', train=False, download=True, transform=transform
+    ),
+}
+
 
 global label_indexes; label_indexes = {
     "train": open_json("sudokuNeuralNet/sdata/trainIndex"),

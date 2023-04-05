@@ -6,26 +6,6 @@ from problog.logic import Term, Constant, list2term
 from deepproblog.dataset import Dataset
 from deepproblog.query import Query
 
-#method for converting and processing cvg 2 json
-def opencvg_convert2json(name):
-    l = list()
-    allLabels = labelsIndex[name + ".csv"]
-    with open(name + ".csv") as file:
-        for line in file:
-            suk, label = str(line).strip().split(".")
-            suk = ast.literal_eval(suk)
-            suk2 = convert2randomIndex(suk, allLabels)
-            combo = {str(label): [suk2,suk]}
-            l.append(combo)
-    jsonStr = json.dumps(l)
-    jsonFile = open(name + ".json", "w")
-    jsonFile.write(jsonStr)
-    jsonFile.close()
-    return l
-
-
-
-
 def getSudokuOnIndexData(subset, index):
     return sudoku_datasets.get(subset)[index]
 
