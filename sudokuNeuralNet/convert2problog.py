@@ -6,31 +6,6 @@ from problog.logic import Term, Constant, list2term
 from deepproblog.dataset import Dataset
 from deepproblog.query import Query
 
-
-
-
-
-
-
-
-def convert2randomIndex(suk2, allLabels):
-    a = list()
-    for suk in suk2:
-        b = list()
-        for x in suk:
-            match x:
-                case 1:
-                    b.append(random.choice(allLabels[0]))
-                case 2:
-                    b.append(random.choice(allLabels[1]))
-                case 3:
-                    b.append(random.choice(allLabels[2]))
-                case 4:
-                    b.append(random.choice(allLabels[3]))
-        a.append(b)
-    return a
-
-
 #method for converting and processing cvg 2 json
 def opencvg_convert2json(name):
     l = list()

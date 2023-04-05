@@ -1,7 +1,7 @@
 import torch
 
 
-from sudokuNeuralNet.dataSudoku import MNISTImages, SudokuDataset
+from sudokuNeuralNet.convert2problog import MNISTImages, SudokuDataset
 from deepproblog.dataset import DataLoader
 from deepproblog.engines import ExactEngine
 from deepproblog.model import Model
