@@ -9,19 +9,19 @@ test9x9([[_,_,_,_,_,_,_,_,_],[_,_,_,_,_,_,_,_,_],[_,_,_,_,_,_,_,_,_],[_,_,_,_,_,
 
 
 %Sudoku is represented as a 2d list
+%Sudoku is represented as a 2d list
 checkValidSudoku(In, Out):-
     convertDigits(In,Out,Con),
     basicChecks(Con,L,Root),
     harderChecks(Con,L,Root).
 
 convertDigits([],[],[]).
-convertDigits([L|Sudoku],[O|Out],[C|Converted]):-
-    convertDigit(L,O,C), convertDigits(Sudoku, Out, Converted).
+convertDigits([L|Sudoku],[O|Out],[C|Con]):-
+    convertDigit(L,O,C), convertDigits(Sudoku, Out,Con).
 
 convertDigit([],[],[]).
-convertDigit([El|L],[C|Out],[C|Co]):- convertFoto(El,C), convertDigit(L,Out,Co).
-convertDigit([El|L],[O|Out]):- El \= empty, convertFoto(El,C), convertDigit(L,Out).
-convertDigit([empty|L],[O|Out]):- convertDigit(L,Out).
+convertDigit([El|L],[_O|Out],[O|Con]):- El \= empty, convertFoto(El,O), convertDigit(L,Out,Con).
+convertDigit([empty|L],[_|Out],[_|Con]):- convertDigit(L,Out,Con).
 
 %the easy checks
 basicChecks(Sudoku,L,Root):-

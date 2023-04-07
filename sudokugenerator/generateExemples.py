@@ -19,16 +19,23 @@ def generate(amount=100,size=9):
     for i in range(amount):
         suk = rand.RandomGenerator.generateRandomSudoku(size)
         suk.matrix = suk.generateRandomEmptys(suk)
+        i = random.randint(0, 1)
+        if i:
+            suk.matrix = suk.makeRandomInvalid(suk, size)
         suk2 = suk.getMatrixValues(suk.matrix)
         suk = suk.getMatrixValues(suk.matrix)
-        print(solveSudoku.solve(suk2))
+        label = solveSudoku.solve(suk2)
+        print(label)
         print(suk)
-        l.append(suk)
-    print(link2MnistFoto(l, size))
+        indexed = link2MnistFoto(suk)
+        combo = {str(label): [indexed, suk]}
+        l.append(combo)
+    print(l)
+    data.saveData2json("train4x4WithEmpty",l)
     return l
 
 
-def replaceWithRandomIndex(sudoku, size, subsets):
+def replaceWithRandomIndex(sudoku, subsets):
     a = list()
     for row in sudoku:
         b = list()
@@ -41,11 +48,8 @@ def replaceWithRandomIndex(sudoku, size, subsets):
     return a
 
 
-def link2MnistFoto(sudokus, size):
+def link2MnistFoto(sudoku):
     subsets = data.label_indexes["train"]
-    a = list()
-    for sudoku in sudokus:
-        a.append(replaceWithRandomIndex(sudoku, size, subsets))
-    return a
+    return replaceWithRandomIndex(sudoku, subsets)
 
-generate(2,9)
+generate(10000,4)

@@ -84,6 +84,20 @@ class Sudoku:
         return [[Sudoku.emptyOrNot(x) for x in row] for row in sudoku.matrix]
 
     @staticmethod
+    def invalidOrNot(x, size):
+        i = random.randint(0, 1)
+        j = random.randint(1, size)
+        if i or x.value == 0:
+            return x
+        else:
+            x.value = j
+            return x
+
+    @staticmethod
+    def makeRandomInvalid(sudoku, size):
+        return [[Sudoku.invalidOrNot(x, size) for x in row] for row in sudoku.matrix]
+
+    @staticmethod
     def getSetValues(s):
         return {t.value for t in s}
 

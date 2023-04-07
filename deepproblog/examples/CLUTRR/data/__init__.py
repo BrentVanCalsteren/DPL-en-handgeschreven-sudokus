@@ -9,8 +9,8 @@ import torch
 from torch.utils.data import Dataset as PyDataset
 
 from typing import Union
-from deepproblog.src.deepproblog.dataset import Dataset
-from deepproblog.src.deepproblog.query import Query
+from deepproblog.dataset import Dataset
+from deepproblog.query import Query
 from problog.logic import Term, Constant, list2term
 
 # 1 noise_free

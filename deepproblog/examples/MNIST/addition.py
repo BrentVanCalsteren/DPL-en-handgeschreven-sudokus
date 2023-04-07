@@ -11,7 +11,7 @@ from deepproblog.model import Model
 from deepproblog.network import Network
 from deepproblog.train import train_model
 
-method = "exact"
+method = "geometric_mean"
 N = 1
 
 name = "addition_{}_{}".format(method, N)

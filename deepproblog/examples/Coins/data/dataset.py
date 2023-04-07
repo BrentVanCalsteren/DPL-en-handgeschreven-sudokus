@@ -2,8 +2,8 @@ import os
 
 import torchvision.transforms as transforms
 
-from deepproblog.src.deepproblog.dataset import ImageDataset
-from deepproblog.src.deepproblog.query import Query
+from deepproblog.dataset import ImageDataset
+from deepproblog.query import Query
 from problog.logic import Term, Constant
 
 path = os.path.dirname(os.path.abspath(__file__))

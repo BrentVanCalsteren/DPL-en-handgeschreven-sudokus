@@ -7,6 +7,7 @@ from problog.logic import Term, Var, Constant
 from problog.program import LogicProgram
 from pyswip import Prolog
 
+
 from .heuristics import Heuristic
 from .swi_program import SWIProgram
 
@@ -47,7 +48,7 @@ class PrologEngine(GenericEngine):
         self.timeout = timeout
         self.ignore_timeout = ignore_timeout
         self.exploration = exploration
-        self.prolog.consult(str(root / "prolog_files" / "engine_heap.pl"))
+        self.prolog.consult(r'C:/Users/brent/git/SolveWrittenSudoku/deepproblog/engines/prolog_engine/prolog_files/engine_heap.pl')
 
     def prepare(self, db):
         program = SWIProgram(db, heuristic=self.heuristic)

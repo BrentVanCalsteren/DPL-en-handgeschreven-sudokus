@@ -2,7 +2,7 @@ from typing import List, Union
 
 import numpy as np
 
-from deepproblog.src.deepproblog.utils import TabularFormatter
+from deepproblog.utils import TabularFormatter
 
 
 class ConfusionMatrix(object):

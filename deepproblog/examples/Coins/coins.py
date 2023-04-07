@@ -1,14 +1,14 @@
 import torch
 
-from deepproblog.src.deepproblog.dataset import DataLoader
-from deepproblog.src.deepproblog.engines import ExactEngine
-from deepproblog.src.deepproblog.evaluate import get_confusion_matrix
-from deepproblog.src.deepproblog.examples.Coins.data.dataset import train_dataset, test_dataset
-from deepproblog.src.deepproblog.model import Model
-from deepproblog.src.deepproblog.network import Network
-from deepproblog.src.deepproblog.train import train_model
-from deepproblog.src.deepproblog.utils.standard_networks import smallnet
-from deepproblog.src.deepproblog.utils.stop_condition import Threshold, StopOnPlateau
+from deepproblog.dataset import DataLoader
+from deepproblog.engines import ExactEngine
+from deepproblog.evaluate import get_confusion_matrix
+from deepproblog.examples.Coins.data.dataset import train_dataset, test_dataset
+from deepproblog.model import Model
+from deepproblog.network import Network
+from deepproblog.train import train_model
+from deepproblog.utils.standard_networks import smallnet
+from deepproblog.utils.stop_condition import Threshold, StopOnPlateau
 
 batch_size = 5
 loader = DataLoader(train_dataset, batch_size)

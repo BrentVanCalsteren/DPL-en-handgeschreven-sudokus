@@ -1,14 +1,14 @@
 from json import dumps
 
-from deepproblog.src.deepproblog.engines import ApproximateEngine
-from deepproblog.src.deepproblog.evaluate import get_confusion_matrix
-from deepproblog.src.deepproblog.network import Network
-from deepproblog.src.deepproblog.model import Model
-from deepproblog.src.deepproblog.dataset import DataLoader
-from deepproblog.src.deepproblog.examples.CLUTRR.architecture import Encoder, RelNet, GenderNet
-from deepproblog.src.deepproblog.examples.CLUTRR.data import CLUTRR, CLUTRR_Dataset
-from deepproblog.src.deepproblog.train import TrainObject
-from deepproblog.src.deepproblog.utils.stop_condition import Threshold, StopOnPlateau
+from deepproblog.engines import ApproximateEngine
+from deepproblog.evaluate import get_confusion_matrix
+from deepproblog.network import Network
+from deepproblog.model import Model
+from deepproblog.dataset import DataLoader
+from deepproblog.examples.CLUTRR.architecture import Encoder, RelNet, GenderNet
+from deepproblog.examples.CLUTRR.data import CLUTRR, CLUTRR_Dataset
+from deepproblog.train import TrainObject
+from deepproblog.utils.stop_condition import Threshold, StopOnPlateau
 import torch
 
 name = 'sys_gen_0'
