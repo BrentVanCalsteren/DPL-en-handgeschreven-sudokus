@@ -1,5 +1,5 @@
 import random
-import sudokuNeuralNet.dataSets as data
+import dataSets as data
 import solveSudoku
 from sudokugenerator import RandomGenerator as rand
 
@@ -28,7 +28,7 @@ def generate(amount=100,size=9):
         print(label)
         print(suk)
         indexed = link2MnistFoto(suk)
-        combo = {str(label): [indexed, suk]}
+        combo = {str(label): [indexed, suk, suk2]}
         l.append(combo)
     print(l)
     data.saveData2json("train4x4WithEmpty",l)

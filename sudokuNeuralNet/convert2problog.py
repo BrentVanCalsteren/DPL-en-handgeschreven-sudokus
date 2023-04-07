@@ -1,18 +1,10 @@
-import random
 from typing import Mapping, Iterator
-import ast
 import torch
-from problog.logic import Term, Constant,Var, list2term
+from problog.logic import Term, Constant, list2term
 from deepproblog.dataset import Dataset
 from deepproblog.query import Query
 from sudokuNeuralNet import dataSets
 
-
-def getSudokuOnIndexData(subset, index):
-    return dataSets.sudoku_datasets.get(subset)[index]
-
-def getSudokuOnIndexLabel(subset, index):
-    return dataSets.sudoku_datasets[subset][index].split('.')[1]
 
 def convert2TermOrConstant(suk, subset):
     t = []
@@ -56,7 +48,7 @@ class SudokuDataset(Dataset):
         return len(self.dataset)
 
     def to_query(self, i: int) -> Query:    # index i van een training/test voorbeeld
-        dic = getSudokuOnIndexData(self.subset, i)
+        dic = dataSets.getSudokuOnIndexData(self.subset, i)
         label = list(dic.keys())[0]
         sudokuAndSolved = list(list(dic.values())[0])
         solved = list2term([list2term([convert2VarOrConstant(x) for x in row]) for row in sudokuAndSolved[1]])

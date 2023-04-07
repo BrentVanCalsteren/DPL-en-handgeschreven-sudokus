@@ -23,7 +23,7 @@ def getSubsetsMnistlabels(subset, size):
 
 def saveData2json(name, data):
     jsonStr = json.dumps(data)
-    jsonFile = open("sudokuNeuralNet/sdata/"+ name + ".json", "w")
+    jsonFile = open("C:/Users/brent/git/SolveWrittenSudoku/sudokuNeuralNet/sdata/"+ name + ".json", "w")
     jsonFile.write(jsonStr)
     jsonFile.close()
 
@@ -46,7 +46,7 @@ global datasets; datasets = {
 
 
 global label_indexes; label_indexes = {
-    "train": open_json("sudokuNeuralNet/sdata/trainIndex"),
+    "train": open_json("C:/Users/brent/git/SolveWrittenSudoku/sudokuNeuralNet/sdata/trainIndex"),
 }
 
 #global sudoku_datasets; sudoku_datasets = {
