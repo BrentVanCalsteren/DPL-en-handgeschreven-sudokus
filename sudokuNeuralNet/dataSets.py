@@ -10,6 +10,7 @@ Help functions for loading datasets correctly
 def getSudokuOnIndexData(subset, index):
     return sudoku_datasets.get(subset)[index]
 
+
 def getSudokuSetLenght(subset):
     return len(sudoku_datasets.get(subset))
 
@@ -20,8 +21,8 @@ def getSubsetsMnistlabels(subset, size):
     l = list()
     temp = list()
     for j in range(1, size + 1):
-        for i in range(len(datasets[subset])):
-            if j == datasets[subset][i][1]:
+        for i in range(len(mnist[subset])):
+            if j == mnist[subset][i][1]:
                 temp.append(i)
         l.append(temp)
         temp = list()
@@ -41,7 +42,7 @@ Global DataSets
 """
 
 
-global datasets; datasets = {
+global mnist; mnist = {
     "train": torchvision.datasets.MNIST(
         root='data/', train=True, download=True, transform=transform
     ),

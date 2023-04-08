@@ -103,11 +103,13 @@ def train_model_check_sudoku(model,report=100, epochs=1):
 
 
 def main():
+    #image, label = dataSets.mnist["train"][15175]
+    #print(label)
    # model = SudokuSolver()
     #train_model_fill_sudoku(model,1000, 100)
-    model = SudokuChecker()
-    train_model_check_sudoku(model,1000, 100)
-
+    #model = SudokuChecker()
+    #train_model_check_sudoku(model,1000, 100)
+    pass
 
 if __name__ == '__main__':
     main()
