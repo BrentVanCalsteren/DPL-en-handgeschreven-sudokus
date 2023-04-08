@@ -32,7 +32,7 @@ class MNISTImages(Mapping[Term, torch.Tensor]):
 
     def __init__(self, subset):
         self.subset = subset
-        self.dataset = dataSets.datasets[self.subset]
+        self.dataset = dataSets.mnist[self.subset]
 
     def __getitem__(self, item):
         return self.dataset[int(item[0])][0]
@@ -53,6 +53,6 @@ class SudokuDataset(Dataset):
         sudokuAndSolved = list(list(dic.values())[0])
         solved = list2term([list2term([convert2VarOrConstant(x) for x in row]) for row in sudokuAndSolved[1]])
         sudoku = convert2TermOrConstant(sudokuAndSolved[0], self.subset)
-        term = Term('checkValidSudoku', sudoku, solved)
+        term = Term('checkValidSudoku', sudoku)
         p = float(label == 'True')
         return Query(term, p=p)

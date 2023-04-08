@@ -11,9 +11,9 @@ from torchNet import MNIST_Net
 
 network = MNIST_Net()
 net = Network(network, "mnist_net", batching=True)
-net.optimizer = torch.optim.Adam(network.parameters(), lr=1e-2)
+net.optimizer = torch.optim.Adam(network.parameters(), lr=1e-3)
 
-model = Model("checkValidSudoku.pl", [net])
+model = Model("checkValidSudokuVer2.pl", [net])
 model.set_engine(ExactEngine(model))
 model.add_tensor_source("train", MNISTImages("train"))
 model.add_tensor_source("test", MNISTImages("test"))

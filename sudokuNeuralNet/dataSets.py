@@ -57,6 +57,6 @@ global mnist; mnist = {
 #}
 
 global sudoku_datasets; sudoku_datasets = {
-    "train": open_json("sdata/train4x4WithEmpty"),
+    "train": open_json("sdata/train4x4WithEmptyTrue"),
     "test": open_json("sdata/stest")
 }

@@ -11,6 +11,7 @@ test9x9([[_,_,_,_,_,_,_,_,_],[_,_,_,_,_,_,_,_,_],[_,_,_,_,_,_,_,_,_],[_,_,_,_,_,
 %Sudoku is represented as a 2d list
 %Sudoku is represented as a 2d list
 checkValidSudoku(In, Out):-
+    print(In),
     convertDigits(In,Out,Con),
     basicChecks(Con,L,Root),
     harderChecks(Con,L,Root).
