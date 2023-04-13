@@ -1,3 +1,4 @@
+import torch
 import torch.nn as nn
 
 
@@ -73,22 +74,35 @@ class convert_sudoku_image_to_number(nn.Module):
 
 
 class Sudoku_Check_Valid(nn.Module):
-    def __init__(self):
+    def __init__(self, sudoku_size):
         super(Sudoku_Check_Valid, self).__init__()
+        self.sudoku_size = sudoku_size
         self.layers = [nn.Sequential(
-            nn.Linear(16, 128),
+            nn.Linear(sudoku_size, sudoku_size*2),
             nn.ReLU())]
 
-        for _ in range(10):
+        temp = sudoku_size*2
+        for _ in range(2):
             self.layers.append(nn.Sequential(
-                nn.Linear(128, 128),
+                nn.Linear(temp, temp*2),
                 nn.ReLU()))
-
-        self.layers.append( [nn.Sequential(
-            nn.Linear(128, 1),
-            nn.Sigmoid())])
-
+            temp*=2
+        for _ in range(2):
+            self.layers.append(nn.Sequential(
+                nn.Linear(temp, temp//2),
+                nn.ReLU()))
+            temp//=2
+        self.layers.append(nn.Sequential(
+            nn.Linear(temp, 1),
+            nn.Sigmoid()))
+        self.myparameters = nn.ParameterList(self.layers)
     def forward(self, x):
-        for layer in self.layers:
+        for i, layer in enumerate(self.myparameters):
             x = layer(x)
         return x
+
+def save_model(model,name):
+    torch.save(model.state_dict(), "snapshot/" + ".pth")
+
+def load_model(name):
+    return torch.load("snapshot/" + name + ".pth")

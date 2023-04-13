@@ -57,9 +57,10 @@ def load_image(index):
 
 
 def main():
-    for _ in range(100):
-        train_model(1000)
-    pass
+    #for _ in range(100):
+    train_model(1000)
+    #pass
+    torchNet.save_model(model, "test")
 
 if __name__ == '__main__':
     main()

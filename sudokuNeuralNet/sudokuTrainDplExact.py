@@ -28,7 +28,6 @@ loader = DataLoader(dataset, 2, False)
 #possible loss functions "mse", "cross_entropy",
 train_model(model, loader, 1, loss_function_name="cross_entropy", with_negatives=False, log_iter=1, profile=0)
 model.save_state("snapshot/sudoku_model.pth")
-
 # Query the model
 query = dataset.to_query(0)
 result = model.solve([query])[0]
