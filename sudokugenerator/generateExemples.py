@@ -25,13 +25,13 @@ def generate(amount=100,size=9):
         suk2 = suk.getMatrixValues(suk.matrix)
         suk = suk.getMatrixValues(suk.matrix)
         label = solveSudoku.solve(suk2)
-        if label:
-            print(label)
-            print(suk)
-            indexed = link2MnistFoto(suk)
-            combo = {str(label): [indexed, suk, suk2]}
-            l.append(combo)
-    data.saveData2json("train4x4WithEmptyTrue",l)
+        #if label:
+        print(label)
+        print(suk)
+        indexed = link2MnistFoto(suk)
+        combo = {str(label): [indexed, suk, suk2]}
+        l.append(combo)
+    data.saveData2json("train4x410Exemples",l)
     return l
 
 
@@ -52,4 +52,4 @@ def link2MnistFoto(sudoku):
     subsets = data.label_indexes["train"]
     return replaceWithRandomIndex(sudoku, subsets)
 
-generate(1000,4)
+generate(10,4)

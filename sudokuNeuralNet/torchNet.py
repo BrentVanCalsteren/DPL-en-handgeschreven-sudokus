@@ -26,3 +26,69 @@ class MNIST_Net(nn.Module):
         x = x.view(-1, 16 * 4 * 4)
         x = self.classifier(x)
         return x
+
+class convert_sudoku_image_to_number(nn.Module):
+    def __init__(self, sudoku_size,image_size):
+        super(convert_sudoku_image_to_number, self).__init__()
+        # Unless you pad your image with zeros, a convolutional filter will shrink the size of your output image by filter_size - 1 across the height and width:
+        # one conv layer (without padding)	(h, w) -> (h-kernelsize+1, w-kernelsize+1) image 28x28 ->
+        # a MaxPool	-> ((h-4)//2, (w-4)//2)
+        # self.pool = nn.MaxPool2d(2,2)  # 2x2 max pooling
+        #############
+        # image layers
+        #############
+        self.sudoku_size = sudoku_size
+        self.softMax = nn.Softmax(dim=2)
+        input_size = sudoku_size
+        output_size = input_size * 2
+        self.layer1 = nn.Sequential(
+            nn.Conv2d(input_size, output_size, kernel_size=5),
+            # image_size = image_size-kernel_size+1 | 28 - 5 + 1 = 24
+            nn.ReLU(),
+            nn.MaxPool2d(2, 2)  # pak grootste waarde 2x2 window image_size = image_size/2 | 24/2 = 12
+        )
+        image_size = (image_size - 5 + 1) // 2
+        input_size = input_size * 2
+        output_size = input_size * 2
+        self.layer2 = nn.Sequential(
+            nn.Conv2d(input_size, output_size, kernel_size=5),
+            # image_size = image_size-kernel_size+1 | 12 - 5 + 1 = 8
+            nn.ReLU(),
+            nn.MaxPool2d(2, 2)  # 8/2 = 4
+        )
+        liniair_input = image_size * image_size * output_size
+        self.Matrix1D = nn.Sequential(
+            nn.Linear(64*4*4, sudoku_size*10),
+            nn.ReLU())
+
+
+    def forward(self, x):
+        x = self.layer1(x)
+        x = self.layer2(x)
+        x = x.reshape(x.size(0), -1)
+        x = self.Matrix1D(x)
+        x = x.view(1, 1, self.sudoku_size,10)
+        x = self.softMax(x)
+        return x
+
+
+class Sudoku_Check_Valid(nn.Module):
+    def __init__(self):
+        super(Sudoku_Check_Valid, self).__init__()
+        self.layers = [nn.Sequential(
+            nn.Linear(16, 128),
+            nn.ReLU())]
+
+        for _ in range(10):
+            self.layers.append(nn.Sequential(
+                nn.Linear(128, 128),
+                nn.ReLU()))
+
+        self.layers.append( [nn.Sequential(
+            nn.Linear(128, 1),
+            nn.Sigmoid())])
+
+    def forward(self, x):
+        for layer in self.layers:
+            x = layer(x)
+        return x
