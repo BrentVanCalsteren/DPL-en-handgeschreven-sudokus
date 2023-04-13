@@ -4,36 +4,35 @@ import solveSudoku
 from sudokugenerator import RandomGenerator as rand
 
 
+def main():
+    generate(amount=10, size=4, name="test",onlyTrue=False,withEmptys=True)
+
+def generate(amount=100,size=9, name="temp", onlyTrue=False,withEmptys=True):
+    l = []
+    for i in range(amount):
+        suk = rand.RandomGenerator.generateRandomSudoku(size)
+        if withEmptys:
+            suk.matrix = suk.generateRandomEmptys(suk)
+        if not onlyTrue:
+            suk.matrix = suk.makeRandomInvalid(suk, size)
+        suk2 = suk.getMatrixValues(suk.matrix)
+        suk = suk.getMatrixValues(suk.matrix)
+        label = solveSudoku.solve(suk2)
+        indexed = link2MnistFoto(suk)
+        combo = {str(label): [indexed, suk, suk2]}
+        l.append(combo)
+    data.saveData2json(name, l)
+    return l
+
+def generateRandomEmptys(sudoku):
+    return [[emptyOrNot(x) for x in row] for row in sudoku]
+
 def emptyOrNot(x):
     i = random.randint(0,1)
     if i:
         return x
     else:
         return 0
-
-def generateRandomEmptys(sudoku):
-    return [[emptyOrNot(x) for x in row] for row in sudoku]
-
-def generate(amount=100,size=9):
-    l = []
-    for i in range(amount):
-        suk = rand.RandomGenerator.generateRandomSudoku(size)
-        suk.matrix = suk.generateRandomEmptys(suk)
-        i = random.randint(0, 1)
-        if i:
-            suk.matrix = suk.makeRandomInvalid(suk, size)
-        suk2 = suk.getMatrixValues(suk.matrix)
-        suk = suk.getMatrixValues(suk.matrix)
-        label = solveSudoku.solve(suk2)
-        #if label:
-        print(label)
-        print(suk)
-        indexed = link2MnistFoto(suk)
-        combo = {str(label): [indexed, suk, suk2]}
-        l.append(combo)
-    data.saveData2json("train4x410Exemples",l)
-    return l
-
 
 def replaceWithRandomIndex(sudoku, subsets):
     a = list()
@@ -52,4 +51,6 @@ def link2MnistFoto(sudoku):
     subsets = data.label_indexes["train"]
     return replaceWithRandomIndex(sudoku, subsets)
 
-generate(10,4)
+
+if __name__ == '__main__':
+    main()

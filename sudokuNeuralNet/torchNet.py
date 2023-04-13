@@ -102,7 +102,7 @@ class Sudoku_Check_Valid(nn.Module):
         return x
 
 def save_model(model,name):
-    torch.save(model.state_dict(), "snapshot/" + ".pth")
+    torch.save(model.state_dict(), "snapshot/" + name + ".pth")
 
 def load_model(name):
     return torch.load("snapshot/" + name + ".pth")
