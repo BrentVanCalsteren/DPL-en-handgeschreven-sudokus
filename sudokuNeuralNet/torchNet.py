@@ -101,6 +101,39 @@ class Sudoku_Check_Valid(nn.Module):
             x = layer(x)
         return x
 
+
+class Complete_Sudoku(nn.Module):
+    def __init__(self, sudoku_size):
+        super(Complete_Sudoku, self).__init__()
+        sq = int(sudoku_size ** (1/2))
+        # CNN layers
+        amount = sq//3
+        convLayer = []
+        insize = 1
+        outsize = sq*sudoku_size
+        for _ in range(sq):
+            convLayer.append(nn.Sequential(
+                nn.Conv2d(insize, outsize, kernel_size=3, padding=2),
+                nn.MaxPool2d(2, 2),
+                nn.ReLU())
+            )
+            insize = outsize
+            #outsize *= 2
+        self.convLayers = nn.ParameterList(convLayer)
+        self.liniair_size = insize*((sq-(amount*2))**2)
+        # stacked liniair layer
+        #self.lin = nn.Linear(self.liniair_size, outsize)
+        self.out = nn.Linear(self.liniair_size, sudoku_size)
+
+    def forward(self, x):
+        for _, layer in enumerate(self.convLayers):
+            x = layer(x)
+        x = x.view(1, self.liniair_size)
+        #x = self.lin(x)
+        x = self.out(x)
+        return x
+
+
 def save_model(model,name):
     torch.save(model.state_dict(), "snapshot/" + name + ".pth")
 

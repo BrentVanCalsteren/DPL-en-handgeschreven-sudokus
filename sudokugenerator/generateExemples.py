@@ -5,7 +5,7 @@ from sudokugenerator import RandomGenerator as rand
 
 
 def main():
-    generate(amount=10, size=4, name="test",onlyTrue=False,withEmptys=True)
+    generate(amount=10000, size=4, name="train4x4EmptyTrue",onlyTrue=True,withEmptys=True)
 
 def generate(amount=100,size=9, name="temp", onlyTrue=False,withEmptys=True):
     l = []
@@ -23,16 +23,6 @@ def generate(amount=100,size=9, name="temp", onlyTrue=False,withEmptys=True):
         l.append(combo)
     data.saveData2json(name, l)
     return l
-
-def generateRandomEmptys(sudoku):
-    return [[emptyOrNot(x) for x in row] for row in sudoku]
-
-def emptyOrNot(x):
-    i = random.randint(0,1)
-    if i:
-        return x
-    else:
-        return 0
 
 def replaceWithRandomIndex(sudoku, subsets):
     a = list()

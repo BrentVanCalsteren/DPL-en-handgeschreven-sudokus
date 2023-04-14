@@ -7,11 +7,17 @@ model = torchNet.Sudoku_Check_Valid(sudoku_size=16)
 optimizer = torch.optim.Adam(model.parameters(), lr=0.00001)
 criterion = nn.BCELoss()
 
+def main():
+    loss = train_model(report=1000, datasetName="train4x4Empty")
+    result = test()
 
-def train_model(report=100):
+def test():
+    pass
+def train_model(report=100, datasetName="train4x4Empty"):
+    loss = list()
     avg_loss = 0.0
     i = 0
-    for data in dataSets.sudoku_datasets["train4x4WithEmpty"]:
+    for data in dataSets.sudoku_datasets[datasetName]:
         avg_loss += updateModel(data).item()
         i+=1
         if i % report == 0:
@@ -34,10 +40,7 @@ def updateModel(data):
     return loss
 
 
-def main():
-    for _ in range(100):
-        train_model(1000)
-    pass
+
 
 if __name__ == '__main__':
     main()
