@@ -2,29 +2,38 @@ import torch
 import torch.nn as nn
 import dataSets
 import torchNet
+from sudokuNeuralNet import plotter
 
 model = torchNet.Sudoku_Check_Valid(sudoku_size=16)
 optimizer = torch.optim.Adam(model.parameters(), lr=0.00001)
 criterion = nn.BCELoss()
 
 def main():
-    loss = train_model(report=1000, datasetName="train4x4Empty")
-    result = test()
+    losses = []
+    iterations = []
+    loss, iteration = train_model(report=1000, datasetName="train4x4Empty")
+    losses += loss
+    iterations += iteration
+    plotter.plot( numbers1=iterations,numbers2=losses, label1="iterations", label2="losses",)
+    #result = test(model)
 
-def test():
-    pass
 def train_model(report=100, datasetName="train4x4Empty"):
     loss = list()
+    iteration = list()
     avg_loss = 0.0
     i = 0
     for data in dataSets.sudoku_datasets[datasetName]:
-        avg_loss += updateModel(data).item()
+        los = updateModel(data).item()
+        avg_loss += los
         i+=1
         if i % report == 0:
             print(f"NumberSamples {i}, Avg loss last {report}: {avg_loss/report}")
+            loss.append(avg_loss/report)
+            iteration.append(i)
            # print(torch_target.view(-1))
             #print("Vals:" + str(torch_output.view(-1)))
             avg_loss = 0
+    return loss, iteration
 
 def updateModel(data):
     label = list(data.keys())[0]

@@ -5,7 +5,7 @@ from sudokugenerator import RandomGenerator as rand
 
 
 def main():
-    generate(amount=10000, size=4, name="train4x4EmptyTrue",onlyTrue=True,withEmptys=True)
+    generate(amount=10000, size=9, name="train9x9NoEmpty",onlyTrue=False,withEmptys=False)
 
 def generate(amount=100,size=9, name="temp", onlyTrue=False,withEmptys=True):
     l = []
@@ -14,7 +14,12 @@ def generate(amount=100,size=9, name="temp", onlyTrue=False,withEmptys=True):
         if withEmptys:
             suk.matrix = suk.generateRandomEmptys(suk)
         if not onlyTrue:
-            suk.matrix = suk.makeRandomInvalid(suk, size)
+            if withEmptys:
+                suk.matrix = suk.makeRandomInvalid(suk, size)
+            else:
+                a = random.randint(0,1)
+                if a:
+                    suk.matrix = suk.makeRandomInvalid(suk, size)
         suk2 = suk.getMatrixValues(suk.matrix)
         suk = suk.getMatrixValues(suk.matrix)
         label = solveSudoku.solve(suk2)

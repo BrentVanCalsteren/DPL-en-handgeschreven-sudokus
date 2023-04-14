@@ -21,7 +21,7 @@ model.add_tensor_source("test", MNISTImages("test"))
 dataset = SudokuDataset("train")
 
 # Train the model
-loader = DataLoader(dataset, 2, False)
+loader = DataLoader(dataset, 2, True)
 
 #opm to self: cross_entropy is default loss function, value tussen 0 en 1
 # -> with_negatives moet dan false zijn denk omdat niet negatieve loss krijgen

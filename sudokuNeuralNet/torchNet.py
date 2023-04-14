@@ -61,8 +61,6 @@ class convert_sudoku_image_to_number(nn.Module):
         self.Matrix1D = nn.Sequential(
             nn.Linear(64*4*4, sudoku_size*10),
             nn.ReLU())
-
-
     def forward(self, x):
         x = self.layer1(x)
         x = self.layer2(x)
@@ -73,38 +71,9 @@ class convert_sudoku_image_to_number(nn.Module):
         return x
 
 
-class Sudoku_Check_Valid(nn.Module):
+class Sudoku_Solver(nn.Module):
     def __init__(self, sudoku_size):
-        super(Sudoku_Check_Valid, self).__init__()
-        self.sudoku_size = sudoku_size
-        self.layers = [nn.Sequential(
-            nn.Linear(sudoku_size, sudoku_size*2),
-            nn.ReLU())]
-
-        temp = sudoku_size*2
-        for _ in range(2):
-            self.layers.append(nn.Sequential(
-                nn.Linear(temp, temp*2),
-                nn.ReLU()))
-            temp*=2
-        for _ in range(2):
-            self.layers.append(nn.Sequential(
-                nn.Linear(temp, temp//2),
-                nn.ReLU()))
-            temp//=2
-        self.layers.append(nn.Sequential(
-            nn.Linear(temp, 1),
-            nn.Sigmoid()))
-        self.myparameters = nn.ParameterList(self.layers)
-    def forward(self, x):
-        for i, layer in enumerate(self.myparameters):
-            x = layer(x)
-        return x
-
-
-class Complete_Sudoku(nn.Module):
-    def __init__(self, sudoku_size):
-        super(Complete_Sudoku, self).__init__()
+        super(Sudoku_Solver, self).__init__()
         sq = int(sudoku_size ** (1/2))
         # CNN layers
         amount = sq//3
@@ -131,6 +100,87 @@ class Complete_Sudoku(nn.Module):
         x = x.view(1, self.liniair_size)
         #x = self.lin(x)
         x = self.out(x)
+        return x
+
+
+class Sudoku_Checker(nn.Module):
+    def __init__(self, sudoku_size):
+        super(Sudoku_Checker, self).__init__()
+        sq = int(sudoku_size ** (1/2))
+        # RNN layers
+        linLayer = []
+        insize = sudoku_size
+        outsize = sudoku_size*2
+        for _ in range(sq):
+            linLayer.append(nn.Sequential(
+                nn.Linear(insize, outsize),
+                nn.ReLU()))
+            insize = outsize
+        outsize = sudoku_size//2
+        for _ in range(sq):
+            linLayer.append(nn.Sequential(
+                nn.Linear(insize, outsize),
+                nn.ReLU()))
+            insize = outsize
+        self.linLayers = nn.ParameterList(linLayer)
+        outsize = 1
+        self.out = nn.Linear(insize, outsize)
+        self.sigmoid = nn.Sigmoid()
+
+    def forward(self, x):
+        for _, layer in enumerate(self.linLayers):
+            x = layer(x)
+        x = self.out(x)
+        x = self.sigmoid(x)
+        return x
+
+
+
+
+class Sudoku_Solve_And_Check(nn.Module):
+    def __init__(self, sudoku_size):
+        super(Sudoku_Solve_And_Check, self).__init__()
+        sq = int(sudoku_size ** (1/2))
+        # CNN layers
+        amount = sq//3
+        convLayer = []
+        insize = 1
+        outsize = sq*sudoku_size
+        for _ in range(sq):
+            convLayer.append(nn.Sequential(
+                nn.Conv2d(insize, outsize, kernel_size=3, padding=2),
+                nn.MaxPool2d(2, 2),
+                nn.ReLU())
+            )
+            insize = outsize
+        self.convLayers = nn.ParameterList(convLayer)
+        self.liniair_size = insize*((sq-(amount*2))**2)
+        # stacked liniair layer
+        #self.lin = nn.Linear(self.liniair_size, outsize)
+        self.solved = nn.Linear(self.liniair_size, sudoku_size)
+        linLayer = []
+        insize = sudoku_size
+        outsize = sudoku_size
+        for _ in range(amount):
+            linLayer.append(nn.Sequential(
+                nn.Linear(insize, outsize),
+                nn.ReLU()))
+        insize = outsize
+        outsize = 1
+
+        for _ in range(amount):
+            linLayer.append(nn.Sequential(
+                nn.Linear(insize, outsize),
+                nn.ReLU()))
+        self.linLayers = nn.ParameterList(linLayer)
+
+    def forward(self, x):
+        for _, layer in enumerate(self.convLayers):
+            x = layer(x)
+        x = x.view(1, self.liniair_size)
+        x = self.solved(x)
+        for _, layer in enumerate(self.linLayers):
+            x = layer(x)
         return x
 
 

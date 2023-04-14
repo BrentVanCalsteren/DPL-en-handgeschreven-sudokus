@@ -60,6 +60,8 @@ global sudoku_datasets; sudoku_datasets = {
     "train": open_json("sdata/train4x410Exemples"),
     "train4x4Empty": open_json("sdata/train4x4Empty"),
     "train4x4EmptyTrue": open_json("sdata/train4x4EmptyTrue"),
+    "train4x4NoEmpty": open_json("sdata/train4x4NoEmpty"),
+    "train9x9NoEmpty": open_json("sdata/train9x9NoEmpty"),
     """
     "train4x4NoEmpty": open_json("sdata/train4x4NoEmpty"),
     "train4x4EmptyTrue": open_json("sdata/train4x4Empty"),
