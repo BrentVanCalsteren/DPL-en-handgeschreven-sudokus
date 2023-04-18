@@ -1,7 +1,6 @@
 import torch
 import torch.nn as nn
-import dataSets
-import torchNet
+from sudokuNeuralNet.NormalNeuralNets import torchNet, dataSets
 from sudokuNeuralNet import plotter
 
 model = torchNet.Sudoku_Check_Valid(sudoku_size=16)

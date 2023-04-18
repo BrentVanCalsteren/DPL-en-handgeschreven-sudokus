@@ -7,7 +7,7 @@ from deepproblog.engines import ExactEngine
 from deepproblog.model import Model
 from deepproblog.network import Network
 from deepproblog.train import train_model
-from torchNet import MNIST_Net
+from sudokuNeuralNet.NormalNeuralNets.torchNet import MNIST_Net
 
 network = MNIST_Net()
 net = Network(network, "mnist_net", batching=True)

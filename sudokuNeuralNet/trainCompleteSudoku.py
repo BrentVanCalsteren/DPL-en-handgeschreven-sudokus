@@ -2,8 +2,7 @@ import random
 
 import torch
 import torch.nn as nn
-import dataSets
-import torchNet
+from sudokuNeuralNet.NormalNeuralNets import torchNet, dataSets
 from sudokuNeuralNet import plotter
 
 model = None

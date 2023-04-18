@@ -3,7 +3,7 @@ import torch
 from problog.logic import Term, Constant, list2term
 from deepproblog.dataset import Dataset
 from deepproblog.query import Query
-from sudokuNeuralNet import dataSets
+from sudokuNeuralNet.NormalNeuralNets import dataSets
 
 
 def convert2TermOrConstant(suk, subset):

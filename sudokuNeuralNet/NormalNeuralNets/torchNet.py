@@ -1,7 +1,9 @@
 import torch
 import torch.nn as nn
 
-
+"""
+DPL NET
+"""
 class MNIST_Net(nn.Module):
     def __init__(self):
         super(MNIST_Net, self).__init__()
@@ -27,6 +29,11 @@ class MNIST_Net(nn.Module):
         x = x.view(-1, 16 * 4 * 4)
         x = self.classifier(x)
         return x
+
+
+"""
+Image -> number sudoku (not solved)
+"""
 
 class convert_sudoku_image_to_number(nn.Module):
     def __init__(self, sudoku_size,image_size):
@@ -71,6 +78,10 @@ class convert_sudoku_image_to_number(nn.Module):
         return x
 
 
+
+"""
+Unsolved -> solved sudoku 
+"""
 class Sudoku_Solver(nn.Module):
     def __init__(self, sudoku_size):
         super(Sudoku_Solver, self).__init__()
@@ -103,6 +114,9 @@ class Sudoku_Solver(nn.Module):
         return x
 
 
+"""
+Checks complete sudoku is solved correctly
+"""
 class Sudoku_Checker(nn.Module):
     def __init__(self, sudoku_size):
         super(Sudoku_Checker, self).__init__()
@@ -136,7 +150,9 @@ class Sudoku_Checker(nn.Module):
 
 
 
-
+"""
+Checks un_complete sudoku is solved correctly
+"""
 class Sudoku_Solve_And_Check(nn.Module):
     def __init__(self, sudoku_size):
         super(Sudoku_Solve_And_Check, self).__init__()
