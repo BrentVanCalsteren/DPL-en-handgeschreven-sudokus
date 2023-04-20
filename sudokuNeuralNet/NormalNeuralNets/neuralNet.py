@@ -6,36 +6,26 @@ import torch
 from matplotlib import pyplot as plt
 
 from sudokuNeuralNet.NormalNeuralNets import dataSets
+from os import path
 
 
 class neuralNet:
-
-
-    def __int__(self):
-        self.dataset = None
-        self.model = None
-        self.optimizer = None
+    def __init__(self, epoch, data_set):
+        self.dataset = self.open_dataset(data_set)
+        _, _, sudoku, _ = self.get_random_data_el()
+        self.sqlength = len(sudoku)
+        self.epoch = epoch
         self.last_targetValue = None
         self.last_outputValue = None
-        self.iterations = 0
-        self.epoch = 0
-        self.avg_loss_each_epoch = list()
-        self.criterion = None
-
-    def train_model(self):
-       pass
-
-    def forward(self, input):
-        pass
-
-    def get_loss(self, target):
-        pass
-
-    def update_net(self, loss):
-        pass
+        self.total_loss = 0
+        self.updates = 0
+        self.avg_loss_list = list()
+        self.report_point_list = list()
 
     def open_dataset(self, name):
-        return json.loads(open("sdata/" + name + ".json", "r").read())
+        basepath = path.dirname(__file__)
+        filepath = path.abspath(path.join(basepath, "..", "sdata"))
+        return json.loads(open(f'{filepath}\\{name}.json', "r").read())
 
     def get_random_data_el(self):
         data = random.choice(self.dataset)
@@ -47,7 +37,11 @@ class neuralNet:
         sudoku_solved = data[2]
         return p, sudoku_foto, sudoku_unsolved, sudoku_solved
 
-    def plot(self, numbers1=[], numbers2=[], label1='', label2=''):
+    def plot(self, numbers1=[], numbers2=[], label1='iteration', label2='loss'):
+        if not numbers1:
+            numbers1 = self.report_point_list
+        if not numbers2:
+            numbers2 = self.avg_loss_list
         plt.plot(numbers1, numbers2)
         plt.xlabel(label1)
         plt.ylabel(label2)
@@ -66,6 +60,5 @@ class neuralNet:
             image, label = dataSets.mnist["train"][index]
             return image
 
-    def rescale(sudoku):
-        l = len(sudoku)
-        return [(x / l) for row in sudoku for x in row]
+    def rescale(self, sudoku):
+        return [(x / self.sqlength) for row in sudoku for x in row]

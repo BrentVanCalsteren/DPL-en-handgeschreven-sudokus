@@ -20,9 +20,9 @@ model.add_tensor_source("test", MNISTImages("test"))
 dataset = AdditionDataset("train")
 
 # Train the model
-#loader = DataLoader(dataset, 2, False)
-#train_model(model, loader, 1, log_iter=100, profile=0)
-#model.save_state("snapshot/trained_model.pth")
+loader = DataLoader(dataset, 2, False)
+train_model(model, loader, 1, log_iter=100, profile=0)
+model.save_state("snapshot/trained_model.pth")
 
 # Query the model
 query = dataset.to_query(0)

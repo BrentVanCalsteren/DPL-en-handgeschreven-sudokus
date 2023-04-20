@@ -37,7 +37,7 @@ model = Model("models/noisy_addition.pl", [net])
 model.add_tensor_source("train", MNIST_train)
 model.add_tensor_source("test", MNIST_test)
 
-model.set_engine(ExactEngine(model))
+model.set_engine(ExactEngine(model), cache=True)
 model.optimizer = SGD(model, 1e-3)
 
 train = train_model(model, queries, 1, log_iter=100)

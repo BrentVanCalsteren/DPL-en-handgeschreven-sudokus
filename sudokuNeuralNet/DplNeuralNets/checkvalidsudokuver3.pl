@@ -1,15 +1,54 @@
-:- use_module(library(apply)).
 nn(mnist_net,[X],Y,[1,2,3,4]) :: convertFoto(X,Y).
 
-%Sudoku is represented as a 2d list
+%PS: THIS CODE IS FOR CHEKCING SUDOKUS THE ARE COMPLETED
+
+
+ %Sudoku is represented as a 2d list
 checkValidSudoku(In):-
-    basicChecks(In,L,Root,Li),
-    replaceEmptyWithVars(In,Temp,Vtemp-Value),
-    generate3Lists2D(Temp,L,Root,L1-L2-L3),
-    getForEachElAllRows(Temp,L1-L2-L3,ElT-ListT),
-    replaceBackNonTemps(ElT-ListT,Vtemp-Value,El-List),
-    hasAllUniqueNumberss(List),
-    checkContraintEachEl(El-List,Li).
+    basicChecks(In,Lenght,Root,Li),
+    linkWithVars(In,Links-Vars),
+    generate3Lists2D(Vars,Lenght,Root,L1-L2-L3),
+    getForEachElAllRows(Vars,L1-L2-L3,El-List),
+    %replaceBackNonTemps(ElT-ListT,Vtemp-Value,El-List),
+    relinkNumbers(Vars,Links),
+    checkContraintEachEl(Vars-List,Li,Out),
+    relinks(Links,El).
+
+relinkNumbers([],[]).
+relinkNumbers([A|Ax],[B|Bx]):-
+     relinkNumber(A,B), relinkNumbers(Ax,Bx).
+
+relinkNumber([],[]).
+relinkNumber([V|Var],[L|Link]):-
+    number(L), V = L,relinkNumber(Var,Link).
+relinkNumber([_V|Var],[L|Link]):-
+    not(number(L)),relinkNumber(Var,Link).
+
+
+
+
+relinks([],[]).
+relinks([El|L],[Link|Links]):-
+    relink(El,Link),relinks(L,Links).
+
+relink([],[]).
+relink([El|L],[Link|Links]):-
+    compound(El),convertFoto(El,Link),relink(L,Links).
+relink([El|L],[_Link|Links]):-
+    not(compound(El)),relink(L,Links).
+
+
+
+linkWithVars([],[]-[]).
+linkWithVars([El|L],[Link|Links]-[Var|Vars]):-
+    linkWithVar(El,Link-Var),linkWithVars(L,Links-Vars).
+
+linkWithVar([],[]-[]).
+linkWithVar([El|L],[El|Links]-[_|Vars]):- not(var(El)),(compound(El);number(El)),linkWithVar(L,Links-Vars).
+linkWithVar([El|L],[A|Links]-[A|Vars]):-(El == empty;El == "empty"),linkWithVar(L,Links-Vars).
+linkWithVar([El|L],[El|Links]-[El|Vars]):-var(El),linkWithVar(L,Links-Vars).
+
+
 
 
 %unifies 2 lists
@@ -24,65 +63,23 @@ unionList([H|T],L2,L):-
 
 
 
+checkContraintEachEl([]-[],_,[]).
+checkContraintEachEl([E|El]-[Li|Lis],List,[R|Result]):-
+    checkContraintEl(E-Li,List,R),
+    checkContraintEachEl(El-Lis,List,Result).
 
-checkContraintEachEl([]-[],_).
-checkContraintEachEl([E|El]-[Li|Lis],List):-
-    checkContraintEl(E-Li,List),
-    checkContraintEachEl(El-Lis,List).
 
+checkContraintEl([]-[],_,[]).
+checkContraintEl([E|El]-[Li|List],L,[R|Result]):-
+    checkContraint(E,Li,L,R),checkContraintEl(El-List,L,Result).
 
-checkContraintEl([]-[],_).
-checkContraintEl([E|El]-[Li|List],L):-
-    checkContraint(E,Li,L),checkContraintEl(El-List,L).
-
-checkContraint(E,L,List):-
+checkContraint(E,L,List,E):-
     not(compound(E)),var(E),member(E,List),
     not(memberCostum(E,L)).
 
-checkContraint(E,L,List):-
-    compound(E),
-    member(C,List),
-    not(memberCostum(C,L)),
-    convertFoto(E,C).
-
-checkContraint(E,_,_):-not(compound(E)),not(var(E)).
-
-
-replaceBackNonTemps(ElT-ListT,Vtemp-Value,El-List):-
-    replaceElss(ElT,Vtemp-Value,El),
-    replaceListss(ListT,Vtemp-Value,List).
-
-replaceListss([],_,[]).
-replaceListss([L1|ListT],Vtemp-Value,[R1|Result]):-
-    replaceLists(L1,Vtemp-Value,R1),
-    replaceListss(ListT,Vtemp-Value,Result).
-
-
-replaceLists([],_,[]).
-replaceLists([L|ListT],Vtemp-Value,[R|Result]):-
-    replaceEls(L,Vtemp-Value,R),
-    replaceLists(ListT,Vtemp-Value,Result).
-
-
-replaceElss([],_,[]).
-replaceElss([E|ElT],Vtemp-Value,[R|Result]):-
-    replaceEls(E,Vtemp-Value,R),replaceElss(ElT,Vtemp-Value,Result).
-
-replaceEls([],_,[]).
-replaceEls([E|ElT],Vtemp-Value,[R|Result]):-
-    replaceEl(E,Vtemp-Value,R),replaceEls(ElT,Vtemp-Value,Result).
-
-
-replaceEl(_,[]-[],_).
-replaceEl(E,[Ve|Vtemp]-[Va|Value],R):-
-    not(replaceel(E,Ve-Va,R)),replaceEl(E,Vtemp-Value,R).
-replaceEl(E,[Ve|_]-[Va|_],R):- replaceel(E,Ve-Va,R).
-
-
-replaceel(E,[]-[],E):-not(compound(E)).
-replaceel(E,[Ve|Vtemp]-[_Va|Value],R):-not(E==Ve), replaceel(E,Vtemp-Value,R).
-replaceel(E,[Ve|_Vtemp]-[Va|_Value],Va):- E==Ve.
-
+checkContraint(E,_L,_List,E):-
+    compound(E),false.
+checkContraint(E,L,_,E):-not(compound(E)),not(var(E)),not(memberCostum(E,L)).
 
 
 getForEachElAllRows([],_,[]-[]).
@@ -124,15 +121,6 @@ memberCostum(Var,[X|Xs]):- not(X == Var),memberCostum(Var,Xs).
 memberCostum(Var,[X|_Xs]):- X == Var.
 
 
-
-replaceEmptyWithVars([],[],[]-[]).
-replaceEmptyWithVars([El|L],[O|Out],[Temp|RTemp]-[Value|RValue]):-
-    replaceEmptyWithVar(El,O,Temp-Value),replaceEmptyWithVars(L,Out,RTemp-RValue).
-
-
-replaceEmptyWithVar([],[],[]-[]).
-replaceEmptyWithVar([El|L],[temp(A)|Out],[temp(A)|Temps]-[El|Values]):- not(El == empty), replaceEmptyWithVar(L,Out,Temps-Values).
-replaceEmptyWithVar([El|L],[_|Out],Rest):- El == empty, replaceEmptyWithVar(L,Out,Rest).
 
 %the easy checks
 basicChecks(Sudoku,L,Root,Li):-

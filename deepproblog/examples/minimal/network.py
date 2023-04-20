@@ -13,11 +13,11 @@ class MNIST_Net(nn.Module):
             nn.ReLU(True),
         )
         self.classifier = nn.Sequential(
-            nn.Linear(16 * 4 * 4, 128),
+            nn.Linear(16 * 4 * 4, 120),
             nn.ReLU(),
-            nn.Linear(64, 32),
+            nn.Linear(120, 84),
             nn.ReLU(),
-            nn.Linear(32, 10),
+            nn.Linear(84, 10),
             nn.Softmax(1),
         )
 

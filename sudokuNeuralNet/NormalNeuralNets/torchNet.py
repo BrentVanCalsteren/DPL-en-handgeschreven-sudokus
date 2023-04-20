@@ -45,36 +45,40 @@ class convert_sudoku_image_to_number(nn.Module):
         #############
         # image layers
         #############
-        self.sudoku_size = sudoku_size
-        self.softMax = nn.Softmax(dim=2)
-        input_size = sudoku_size
-        output_size = input_size * 2
-        self.layer1 = nn.Sequential(
-            nn.Conv2d(input_size, output_size, kernel_size=5),
-            # image_size = image_size-kernel_size+1 | 28 - 5 + 1 = 24
+        sq = int(sudoku_size ** (1 / 2))
+        # RNN layers
+        cnnLayer = []
+        insize = sudoku_size
+        outsize = sudoku_size * 2
+        for _ in range(sq):
+            cnnLayer.append(nn.Sequential(
+            nn.Conv2d(insize, outsize, kernel_size=5, padding=sq),
+            # image_size = image_size-kernel_size+1+padding
             nn.ReLU(),
             nn.MaxPool2d(2, 2)  # pak grootste waarde 2x2 window image_size = image_size/2 | 24/2 = 12
-        )
-        image_size = (image_size - 5 + 1) // 2
-        input_size = input_size * 2
-        output_size = input_size * 2
-        self.layer2 = nn.Sequential(
-            nn.Conv2d(input_size, output_size, kernel_size=5),
-            # image_size = image_size-kernel_size+1 | 12 - 5 + 1 = 8
-            nn.ReLU(),
-            nn.MaxPool2d(2, 2)  # 8/2 = 4
-        )
-        liniair_input = image_size * image_size * output_size
-        self.Matrix1D = nn.Sequential(
-            nn.Linear(64*4*4, sudoku_size*10),
+        ))
+            insize = outsize
+            """
+        outsize = outsize // 2
+        for _ in range(sq):
+            cnnLayer.append(nn.Sequential(
+                nn.Conv2d(insize, outsize, kernel_size=5, padding=sq),
+                # image_size = image_size-kernel_size+1+padding
+                nn.ReLU(),
+                nn.MaxPool2d(2, 2)))
+            insize = outsize
+            #"""
+        self.cnnLayers = nn.ParameterList(cnnLayer)
+        self.liniair = nn.Sequential(
+            nn.Linear(outsize*5*5, sudoku_size),
             nn.ReLU())
+        self.sigmoid = nn.Sigmoid()
     def forward(self, x):
-        x = self.layer1(x)
-        x = self.layer2(x)
-        x = x.reshape(x.size(0), -1)
-        x = self.Matrix1D(x)
-        x = x.view(1, 1, self.sudoku_size,10)
-        x = self.softMax(x)
+        for _, layer in enumerate(self.cnnLayers):
+            x = layer(x)
+        x = x.view(-1)
+        x = self.liniair(x)
+        x = self.sigmoid(x)
         return x
 
 
@@ -82,35 +86,32 @@ class convert_sudoku_image_to_number(nn.Module):
 """
 Unsolved -> solved sudoku 
 """
-class Sudoku_Solver(nn.Module):
+class solveNet(nn.Module):
     def __init__(self, sudoku_size):
-        super(Sudoku_Solver, self).__init__()
+        super(solveNet, self).__init__()
         sq = int(sudoku_size ** (1/2))
         # CNN layers
-        amount = sq//3
         convLayer = []
         insize = 1
-        outsize = sq*sudoku_size
+        outsize = sudoku_size
         for _ in range(sq):
             convLayer.append(nn.Sequential(
-                nn.Conv2d(insize, outsize, kernel_size=3, padding=2),
-                nn.MaxPool2d(2, 2),
+                nn.Conv2d(insize, outsize, kernel_size=sq, padding=sq-1),
                 nn.ReLU())
             )
             insize = outsize
             #outsize *= 2
         self.convLayers = nn.ParameterList(convLayer)
-        self.liniair_size = insize*((sq-(amount*2))**2)
-        # stacked liniair layer
-        #self.lin = nn.Linear(self.liniair_size, outsize)
+        self.liniair_size = outsize*outsize*outsize
         self.out = nn.Linear(self.liniair_size, sudoku_size)
+        self.sigmoid = nn.Sigmoid()
 
     def forward(self, x):
         for _, layer in enumerate(self.convLayers):
             x = layer(x)
         x = x.view(1, self.liniair_size)
-        #x = self.lin(x)
         x = self.out(x)
+        x = self.sigmoid(x)
         return x
 
 

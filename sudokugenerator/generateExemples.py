@@ -5,9 +5,9 @@ from sudokugenerator import RandomGenerator as rand
 
 
 def main():
-    generate(amount=10000, size=9, name="train9x9NoEmpty",onlyTrue=False,withEmptys=False)
+    generate(amount=1000, size=4, name="train4x412Image",onlyTrue=False,withEmptys=False,convert_number=12)
 
-def generate(amount=100,size=9, name="temp", onlyTrue=False,withEmptys=True):
+def generate(amount=100,size=9, name="temp", onlyTrue=False,withEmptys=True, convert_number=None):
     l = []
     for i in range(amount):
         suk = rand.RandomGenerator.generateRandomSudoku(size)
@@ -23,13 +23,13 @@ def generate(amount=100,size=9, name="temp", onlyTrue=False,withEmptys=True):
         suk2 = suk.getMatrixValues(suk.matrix)
         suk = suk.getMatrixValues(suk.matrix)
         label = solveSudoku.solve(suk2)
-        indexed = link2MnistFoto(suk)
+        indexed = link2MnistFoto(suk, convert_number)
         combo = {str(label): [indexed, suk, suk2]}
         l.append(combo)
     data.saveData2json(name, l)
     return l
 
-def replaceWithRandomIndex(sudoku, subsets):
+def replaceWithRandomIndex(sudoku, subsets, convertNumber=None):
     a = list()
     for row in sudoku:
         b = list()
@@ -37,14 +37,22 @@ def replaceWithRandomIndex(sudoku, subsets):
             if x == 0:
                 b.append("empty")
             else:
-                b.append(random.choice(subsets[x-1]))
+                if not convertNumber == None:
+                    if convertNumber > 0:
+                        b.append(random.choice(subsets[x - 1]))
+                    else:
+                        b.append(str(x))
+                    convertNumber -=1
+                else:
+                    b.append(random.choice(subsets[x - 1]))
+
         a.append(b)
     return a
 
 
-def link2MnistFoto(sudoku):
+def link2MnistFoto(sudoku, convertNumber=None):
     subsets = data.label_indexes["train"]
-    return replaceWithRandomIndex(sudoku, subsets)
+    return replaceWithRandomIndex(sudoku, subsets,convertNumber)
 
 
 if __name__ == '__main__':
