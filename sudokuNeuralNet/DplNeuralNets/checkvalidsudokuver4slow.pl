@@ -1,16 +1,14 @@
-nn(mnist_net,[X],Y,[1,2,3,4]) :: convertFoto(X,Y).
+nn(mnist_net,[X],Y,[blah,1,2,3,4]) :: convertFoto(X,Y).
 
 %Sudoku is represented as a 2d list
 checkValidSudoku(In):-
     basicChecks(In,Lenght,Root,Li),
     linkWithVars(In,Links-Vars),
     generate3Lists2D(Vars,Lenght,Root,L1-L2-L3),
-    getForEachElAllRows(Vars,L1-L2-L3,El-List),
+    getForEachElAllRows(Vars,L1-L2-L3,Vars-List),
     relinkNumbers(Vars,Links),
-    checkContraintEachEl(Vars-List,Li,_Out),
-    relinks(Links,El).
+    checkContraintEachEl(Vars-List,Links,Li).
 %-----------------------------------------------
-
 relinkNumbers([],[]).
 relinkNumbers([A|Ax],[B|Bx]):-
      relinkNumber(A,B), relinkNumbers(Ax,Bx).
@@ -23,20 +21,6 @@ relinkNumber([_V|Var],[L|Link]):-
 relinkNumber([_V|Var],[L|Link]):-
     var_custom(L),relinkNumber(Var,Link).
 
-
-relinks([],[]).
-relinks([El|L],[Link|Links]):-
-    relink(El,Link),relinks(L,Links).
-
-relink([],[]).
-relink([El|L],[Link|Links]):-
-    compound_custom(El),convertFoto(El,Link),relink(L,Links).
-relink([El|L],[_Link|Links]):-
-    number_custom(El),relink(L,Links).
-relink([El|L],[_Link|Links]):-
-    var_custom(El),relink(L,Links).
-
-
 linkWithVars([],[]-[]).
 linkWithVars([El|L],[Link|Links]-[Var|Vars]):-
     linkWithVar(El,Link-Var),linkWithVars(L,Links-Vars).
@@ -44,27 +28,28 @@ linkWithVars([El|L],[Link|Links]-[Var|Vars]):-
 linkWithVar([],[]-[]).
 linkWithVar([El|L],[El|Links]-[_|Vars]):- compound_custom(El),linkWithVar(L,Links-Vars).
 linkWithVar([El|L],[El|Links]-[_|Vars]):- number_custom(El),linkWithVar(L,Links-Vars).
-linkWithVar([El|L],[A|Links]-[A|Vars]):-lowEquals(El,empty),linkWithVar(L,Links-Vars).
-linkWithVar([El|L],[A|Links]-[A|Vars]):-lowEquals(El,"empty"),linkWithVar(L,Links-Vars).
+linkWithVar([empty|L],[A|Links]-[A|Vars]):-linkWithVar(L,Links-Vars).
+%linkWithVar([El|L],[A|Links]-[A|Vars]):-lowEquals(El,"empty"),linkWithVar(L,Links-Vars).
 linkWithVar([El|L],[El|Links]-[El|Vars]):-var_custom(El),linkWithVar(L,Links-Vars).
 
 %-----------------------------------------------
 
 %-----------------------------------------------
 
-checkContraintEachEl([]-[],_,[]).
-checkContraintEachEl([E|El]-[Li|Lis],List,[R|Result]):-
-    checkContraintEl(E-Li,List,R),
-    checkContraintEachEl(El-Lis,List,Result).
+checkContraintEachEl([]-[],[],_).
+checkContraintEachEl([E|El]-[Li|Lis],[Link|Links],List):-
+    checkContraintEl(E-Li,Link,List),
+    checkContraintEachEl(El-Lis,Links,List).
 
+checkContraintEl([]-[],[],_).
+checkContraintEl([E|El]-[Li|List],[Link|Links],L):-
+    checkContraint(E,Link,Li,L),checkContraintEl(El-List,Links,L).
 
-checkContraintEl([]-[],_,[]).
-checkContraintEl([E|El]-[Li|List],L,[R|Result]):-
-    checkContraint(E,Li,L,R),checkContraintEl(El-List,L,Result).
+checkContraint(E,Link,L,List):- var_custom(Link),member(E,List), nomemberCostum(E,L).
+checkContraint(E,Link,L,List):-
+    compound_custom(Link), convertFoto(Link,E),nomemberCostum(E,L).
+checkContraint(E,_Link,_L,_):-number_custom(E).
 
-checkContraint(E,L,List,E):- var_custom(E),member(E,List), nomemberCostum(E,L).
-checkContraint(E,_L,_List,E):- compound_custom(E),false.
-checkContraint(E,L,_,E):-number_custom(E),nomemberCostum(E,L).
 %-----------------------------------------------
 %-----------------------------------------------
 
@@ -205,18 +190,18 @@ getSubLB(Start,End,List,Buffer,SubL):-
 
 %buildin replacements
 removeCostum([],_,[]).
-removeCostum([X|List],Var,List):-lowEquals(X,Var).
-removeCostum([X|List],Var,[X|Rest]):-(\+ lowEquals(X,Var)),removeCostum(List,Var,Rest).
+removeCostum([X|List],Var,List):- X == Var.
+removeCostum([X|List],Var,[X|Rest]):-X \== Var,removeCostum(List,Var,Rest).
 
 
 % had 2 write this since buildin member
 % didn't work with variables as I wanted
 memberCostum(_,[]):- false.
-memberCostum(Var,[X|_Xs]):- lowEquals(X,Var).
+memberCostum(Var,[X|_Xs]):- X == Var.
 memberCostum(Var,[_X|Xs]):- memberCostum(Var,Xs).
 
 nomemberCostum(_,[]).
-nomemberCostum(Var,[X|Xs]):-(\+ lowEquals(X,Var)), nomemberCostum(Var,Xs).
+nomemberCostum(Var,[X|Xs]):-X \== Var, nomemberCostum(Var,Xs).
 
 
 list_length([], 0).
@@ -242,5 +227,5 @@ number_custom(X) :-number(X).
 
 compound_custom(X) :-compound(X).
 
-lowEquals(X,Y):- X == Y.
+%lowEquals(X,Y):- X == Y.
 

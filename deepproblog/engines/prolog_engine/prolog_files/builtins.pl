@@ -5,6 +5,7 @@ rstrip(S,[S|T],[]) :-rstrip(S,T,[]),!.
 rstrip(S,[H|T],[H|T2]) :- rstrip(S,T,T2).
 
 allowed_builtin(writeln(_)).
+allowed_builtin(compound(_)).
 allowed_builtin(write(_)).
 allowed_builtin(writeq(_)).
 allowed_builtin(true).
@@ -31,7 +32,7 @@ allowed_builtin(member(_,_)).
 allowed_builtin(length(_,_)).
 allowed_builtin(select(_,_,_)).
 allowed_builtin(nth0(_,_,_)).
-allowed_builtin(transpose(_,_)).
+%allowed_builtin(transpose(_,_)).
 allowed_builtin(include(_,_,_)).
 allowed_builtin(convlist(_,_,_)).
 allowed_builtin(rstrip(_,_,_)).

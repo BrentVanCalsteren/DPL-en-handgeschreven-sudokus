@@ -62,3 +62,8 @@ class neuralNet:
 
     def rescale(self, sudoku):
         return [(x / self.sqlength) for row in sudoku for x in row]
+
+def open_dataset(name):
+    basepath = path.dirname(__file__)
+    filepath = path.abspath(path.join(basepath, "..", "sdata"))
+    return json.loads(open(f'{filepath}\\{name}.json', "r").read())

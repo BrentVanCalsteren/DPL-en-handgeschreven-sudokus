@@ -77,6 +77,7 @@ def get_fact_accuracy(
     model.eval()
     probabilities = defaultdict(list)
     for i, query in enumerate(dataset.to_queries()):
+        print(f"evaluation: {i}")
         answer = model.solve([query])[0]
         if len(answer.result) == 0:
             predicted = empty_answer
