@@ -7,11 +7,11 @@ class mnistNet(neuralNet):
     def __init__(self, data_set, lr, epoch):
         super().__init__(epoch, data_set)
         self.model = torchNet.MNIST_Net(n=self.sqlength)
-        self.optimizer = torch.optim.Adam(self.model.parameters(), lr=lr, weight_decay=1e-6)
+        self.optimizer = torch.optim.Adam(self.model.parameters(), lr=lr, weight_decay=1e-24)
         self.criterion = torch.nn.CrossEntropyLoss()
 
 
-    def train_model(self, iter, report):
+    def train_model(self, iter, report, accu=0.99):
         for e in range(self.epoch):
             i = 0
             for _ in range(iter):
@@ -31,6 +31,8 @@ class mnistNet(neuralNet):
                                   f"\r\n latest output: {self.last_outputValue} \r\n expected: {self.last_targetValue}"
                                   f"\r\n overal ACC: {self.get_accuracy()}")
                             self.total_loss = 0
+                            if (self.accu[-1] > accu):
+                                return
 
 
 
@@ -86,4 +88,6 @@ class mnistNet(neuralNet):
                     total += 1
                     if int(out) == int(comp):
                         correct += 1
-        return correct/total
+        accu = correct / total
+        self.accu.append(accu)
+        return accu

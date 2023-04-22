@@ -1,4 +1,4 @@
-nn(mnist_net,[X],Y,[blah,1,2,3,4]) :: convertFoto(X,Y).
+nn(mnist_net,[X],Y,[1,2,3,4]) :: convertFoto(X,Y).
 
 %Sudoku is represented as a 2d list
 checkValidSudoku(In):-
@@ -15,22 +15,22 @@ relinkNumbers([A|Ax],[B|Bx]):-
 
 relinkNumber([],[]).
 relinkNumber([V|Var],[L|Link]):-
-    number_custom(L), V = L,relinkNumber(Var,Link).
+    number(L), V = L,relinkNumber(Var,Link).
 relinkNumber([_V|Var],[L|Link]):-
-    compound_custom(L),relinkNumber(Var,Link).
+    compound(L),relinkNumber(Var,Link).
 relinkNumber([_V|Var],[L|Link]):-
-    var_custom(L),relinkNumber(Var,Link).
+    var(L),relinkNumber(Var,Link).
 
 linkWithVars([],[]-[]).
 linkWithVars([El|L],[Link|Links]-[Var|Vars]):-
     linkWithVar(El,Link-Var),linkWithVars(L,Links-Vars).
 
 linkWithVar([],[]-[]).
-linkWithVar([El|L],[El|Links]-[_|Vars]):- compound_custom(El),linkWithVar(L,Links-Vars).
-linkWithVar([El|L],[El|Links]-[_|Vars]):- number_custom(El),linkWithVar(L,Links-Vars).
+linkWithVar([El|L],[El|Links]-[_|Vars]):- compound(El),linkWithVar(L,Links-Vars).
+linkWithVar([El|L],[El|Links]-[_|Vars]):- number(El),linkWithVar(L,Links-Vars).
 linkWithVar([empty|L],[A|Links]-[A|Vars]):-linkWithVar(L,Links-Vars).
-%linkWithVar([El|L],[A|Links]-[A|Vars]):-lowEquals(El,"empty"),linkWithVar(L,Links-Vars).
-linkWithVar([El|L],[El|Links]-[El|Vars]):-var_custom(El),linkWithVar(L,Links-Vars).
+linkWithVar(["empty"|L],[A|Links]-[A|Vars]):-linkWithVar(L,Links-Vars).
+linkWithVar([El|L],[El|Links]-[El|Vars]):-var(El),linkWithVar(L,Links-Vars).
 
 %-----------------------------------------------
 
@@ -45,10 +45,10 @@ checkContraintEl([]-[],[],_).
 checkContraintEl([E|El]-[Li|List],[Link|Links],L):-
     checkContraint(E,Link,Li,L),checkContraintEl(El-List,Links,L).
 
-checkContraint(E,Link,L,List):- var_custom(Link),member(E,List), nomemberCostum(E,L).
-checkContraint(E,Link,L,List):-
-    compound_custom(Link), convertFoto(Link,E),nomemberCostum(E,L).
-checkContraint(E,_Link,_L,_):-number_custom(E).
+checkContraint(E,Link,L,List):- var(Link),member(E,List), nomemberCostum(E,L).
+checkContraint(E,Link,L,_List):-
+    compound(Link), convertFoto(Link,E),nomemberCostum(E,L).
+checkContraint(E,_Link,_L,_List):-number(E).
 
 %-----------------------------------------------
 %-----------------------------------------------
@@ -221,11 +221,4 @@ nth0_custom(N, [_|T], I, Elem) :-
 append_custom([], List, List).
 append_custom([H|T], List, [H|Result]) :-
     append_custom(T, List, Result).
-
-var_custom(X) :- var(X).
-number_custom(X) :-number(X).
-
-compound_custom(X) :-compound(X).
-
-%lowEquals(X,Y):- X == Y.
 

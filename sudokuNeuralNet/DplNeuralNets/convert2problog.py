@@ -55,7 +55,7 @@ class SudokuDataset(Dataset):
     def __init__(self, subset):
         self.subset = "train"
         if subset == "train":
-            self.dataset = open_dataset('onlyTrue')
+            self.dataset = open_dataset('train4x4Image1000')
         if subset == "test1":
             self.dataset = open_dataset('test100exemples6fl1')
         if subset == "test2":

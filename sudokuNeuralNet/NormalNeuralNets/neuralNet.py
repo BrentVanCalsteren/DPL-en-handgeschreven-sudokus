@@ -15,12 +15,14 @@ class neuralNet:
         _, _, sudoku, _ = self.get_random_data_el()
         self.sqlength = len(sudoku)
         self.epoch = epoch
+        self.model = None
         self.last_targetValue = None
         self.last_outputValue = None
         self.total_loss = 0
         self.updates = 0
         self.avg_loss_list = list()
         self.report_point_list = list()
+        self.accu = list()
 
     def open_dataset(self, name):
         basepath = path.dirname(__file__)
@@ -71,6 +73,14 @@ class neuralNet:
 
     def rescale(self, sudoku):
         return [[(x / self.sqlength) for x in row] for row in sudoku]
+    def save(self,name="name"):
+        torch.save(self.model,"/model/"+name)
+
+    def saveTrainData2json(self, name):
+        jsonStr = json.dumps([self.avg_loss_list,self.report_point_list,self.accu])
+        jsonFile = open("data/"+ name + ".json", "w")
+        jsonFile.write(jsonStr)
+        jsonFile.close()
 
 
 def open_dataset(name):
