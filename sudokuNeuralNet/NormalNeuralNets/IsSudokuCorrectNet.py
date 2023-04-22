@@ -4,7 +4,7 @@ from sudokuNeuralNet.NormalNeuralNets import torchNet
 from sudokuNeuralNet.NormalNeuralNets.neuralNet import neuralNet
 
 
-class checkIsCorrect(neuralNet):
+class isCorrectNet(neuralNet):
     def __init__(self, data_set, lr, epoch):
         super().__init__(epoch,data_set)
         self.model = torchNet.Sudoku_Checker(sudoku_size=self.sqlength**2)
@@ -14,7 +14,7 @@ class checkIsCorrect(neuralNet):
 
     def train_model(self, iter, report):
         for e in range(self.epoch):
-            for i in range(iter):
+            for i in range(1,iter+1):
                 target, _, input, _ = self.get_random_data_el()
                 self.forward(input)
                 loss = self.get_loss(target)
@@ -24,7 +24,8 @@ class checkIsCorrect(neuralNet):
                     self.avg_loss_list.append(avg_loss)
                     self.report_point_list.append(i+(e*iter))
                     print(f" Iteration: {i},epoch {e}: Avg loss {avg_loss}: "
-                          f"\r\n latest output: {self.last_outputValue} \r\n expected: {self.last_targetValue}")
+                          f"\r\n latest output: {self.last_outputValue} \r\n expected: {self.last_targetValue}"
+                          f"\r\n overal ACC: {self.get_accuracy()}")
                     self.total_loss = 0
 
 
@@ -46,3 +47,18 @@ class checkIsCorrect(neuralNet):
         self.optimizer.zero_grad()
         loss.backward()
         self.optimizer.step()
+
+    def get_accuracy(self, name ="test100-16-empty-4x4"):
+        dset = self.open_dataset(name)
+        total = 0
+        correct = 0
+        for ddata in dset:
+            target, _, input, _ = self.convert_data(ddata)
+            input = self.rescale(input)
+            torch_input = torch.tensor(input, dtype=torch.float32).view(1, self.sqlength ** 2)
+            output = self.model(torch_input).item()
+            comp = target
+            total += 1
+            if round(output) == int(comp):
+                correct += 1
+        return correct/total

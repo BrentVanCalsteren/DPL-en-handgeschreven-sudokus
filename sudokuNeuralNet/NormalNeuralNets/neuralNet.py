@@ -37,6 +37,15 @@ class neuralNet:
         sudoku_solved = data[2]
         return p, sudoku_foto, sudoku_unsolved, sudoku_solved
 
+    def convert_data(self, data):
+        label = list(data.keys())[0]
+        p = float(label == 'True')
+        data = list(list(data.values())[0])
+        sudoku_foto = self.convert2image(data[0])
+        sudoku_unsolved = data[1]
+        sudoku_solved = data[2]
+        return p, sudoku_foto, sudoku_unsolved, sudoku_solved
+
     def plot(self, numbers1=[], numbers2=[], label1='iteration', label2='loss'):
         if not numbers1:
             numbers1 = self.report_point_list
@@ -48,8 +57,8 @@ class neuralNet:
         plt.show()
 
     def convert2image(self, sudoku):
-        list = [self.load_image(x) for row in sudoku for x in row]
-        return torch.stack(list, dim=1)
+        list = [[self.load_image(x) for x in row] for row in sudoku]
+        return torch.stack([torch.stack(row) for row in list])
         # tuples = [torch.squeeze(torch.tensor(el)).tolist() for el in list]
         # return tuples
 
@@ -61,7 +70,8 @@ class neuralNet:
             return image
 
     def rescale(self, sudoku):
-        return [(x / self.sqlength) for row in sudoku for x in row]
+        return [[(x / self.sqlength) for x in row] for row in sudoku]
+
 
 def open_dataset(name):
     basepath = path.dirname(__file__)

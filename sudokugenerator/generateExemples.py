@@ -6,7 +6,7 @@ from sudokugenerator import RandomGenerator as rand
 
 
 def main():
-     generate(amount=100,size=4,convert_number=6,onlyTrue=True,withEmptys=True,name="onlyTrue")
+     generate(amount=10000,size=4,convert_number=16,onlyTrue=False,withEmptys=True,name="train4x4EmptyImage")
 
 def generate(amount=100,size=9, name="temp", onlyTrue=False,withEmptys=True, convert_number=None):
     l = []
