@@ -2,6 +2,7 @@ import json
 
 import torch
 import torch.nn as nn
+from pathlib import Path
 
 """
 DPL NET
@@ -44,6 +45,27 @@ class MNIST_Net(nn.Module):
 """
 Image -> number sudoku (not solved)
 """
+class oneHugeNet2(nn.Module):
+    def __init__(self, sudoku_size):
+        super(oneHugeNet2, self).__init__()
+        self.mnistNet = MNIST_Net(int(sudoku_size**(1/2)))
+        self.sudokusize = sudoku_size
+        self.logicNet = Sudoku_Checker(sudoku_size)
+
+    def forward(self, x):
+        xList = torch.split(x, 1)
+        outputFirstNet = [self.mnistNet(a) for a in xList]
+        outputFirstNet = [convert(a,self.sudokusize**(1/2)) for a in outputFirstNet]
+        input = torch.cat(outputFirstNet,dim=0)
+        x = self.logicNet(input)
+        return x
+
+
+def convert(tensor,scale):
+    index = torch.argmax(tensor, dim=1).item()
+    t = tensor[0][index]
+    t = (t/t*index+1)/scale
+    return t.unsqueeze(0)
 
 class oneHugeNet(nn.Module):
     def __init__(self, sudoku_size):
@@ -134,8 +156,16 @@ class Sudoku_Checker(nn.Module):
 
 
 def save_model(model,name):
-    torch.save(model.state_dict(), "snapshot/" + name + ".pth")
+    torch.save({
+        'model_state_dict': model.state_dict()},
+        f'snapshot/{name}.pth')
 
-def load_model(name):
-    return torch.load("snapshot/" + name + ".pth")
+def load_in_model(model,name):
+    checkpoint = torch.load(f'snapshot/{name}.pth')
+    model.load_state_dict(checkpoint['model_state_dict'])
 
+def saveTrainData2json(data, name):
+    jsonStr = json.dumps(data)
+    jsonFile = open("data/" + name + ".json", "w")
+    jsonFile.write(jsonStr)
+    jsonFile.close()

@@ -74,15 +74,26 @@ class Sudoku:
     def emptyOrNot(x):
         i = random.randint(0, 1)
         if i:
-            return x
-        else:
             x.value = 0
-            return x
+            return True,x
+        else:
+            return False, x
 
     @staticmethod
-    def generateRandomEmptys(sudoku):
-        return [[Sudoku.emptyOrNot(x) for x in row] for row in sudoku.matrix]
-
+    def generateRandomEmptys(sudoku, emptys):
+        a = list()
+        for row in sudoku.matrix:
+            b = list()
+            for x in row:
+                if emptys > 0:
+                    bol, x = Sudoku.emptyOrNot(x)
+                    if bol:
+                        emptys-=1
+                elif emptys < 0:
+                    bol, x = Sudoku.emptyOrNot(x)
+                b.append(x)
+            a.append(b)
+        return a
     @staticmethod
     def invalidOrNot(x, size):
         i = random.randint(0, 1)

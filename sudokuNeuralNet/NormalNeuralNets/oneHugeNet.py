@@ -7,8 +7,8 @@ from sudokuNeuralNet.NormalNeuralNets.neuralNet import neuralNet
 class oneHugeNet(neuralNet):
     def __init__(self, data_set, lr, epoch):
         super().__init__(epoch,data_set)
-        self.model = torchNet.oneHugeNet(self.sqlength ** 2)
-        self.optimizer = torch.optim.Adam(self.model.parameters(), lr=lr,weight_decay=1e-6)
+        self.model = torchNet.oneHugeNet2(self.sqlength ** 2)
+        self.optimizer = torch.optim.Adam(self.model.parameters(), lr=lr)
         self.criterion = torch.nn.BCELoss()
 
 
@@ -49,7 +49,7 @@ class oneHugeNet(neuralNet):
         loss.backward()
         self.optimizer.step()
 
-    def get_accuracy(self, name ="test100-16-empty-4x4"):
+    def get_accuracy(self, name ="test100-16-4x4"):
         dset = self.open_dataset(name)
         total = 0
         correct = 0

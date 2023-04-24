@@ -5,15 +5,25 @@ from sudokuNeuralNet.NormalNeuralNets import neuralNet
 from sudokugenerator import RandomGenerator as rand
 
 
-def main():
-     generate(amount=1000,size=4,convert_number=16,onlyTrue=False,withEmptys=True,name="train4x4Image1000")
 
-def generate(amount=100,size=9, name="temp", onlyTrue=False,withEmptys=True, convert_number=None):
+def main():
+    size = 4
+    eval_itertion = 10
+    images = 2
+    empty = 15
+    #generate(amount=100, size=4, convert_number=6, onlyTrue=False, withEmptys=False, name='test100exemples6images')
+    #"""
+    for i in range(eval_itertion):
+        trainset = f'train4x4ImagesTrueAllEmpty{images}eval{i}'
+        generate(amount=100, size=size, convert_number=images,emptys=empty, onlyTrue=True, withEmptys=True, name=trainset)
+    """
+    #"""
+def generate(amount=100,size=9, name="temp", onlyTrue=False,withEmptys=True, convert_number=None, emptys=-1):
     l = []
     for i in range(amount):
         suk = rand.RandomGenerator.generateRandomSudoku(size)
         if withEmptys:
-            suk.matrix = suk.generateRandomEmptys(suk)
+            suk.matrix = suk.generateRandomEmptys(suk,emptys)
         if not onlyTrue:
             a = random.randint(0,1)
             if a:
@@ -22,15 +32,26 @@ def generate(amount=100,size=9, name="temp", onlyTrue=False,withEmptys=True, con
         suk = suk.getMatrixValues(suk.matrix)
         label = solveSudoku.solve(suk2)
         indexed = link2MnistFoto(suk, convert_number)
+        if convert_number != None and emptys >= convert_number:
+            removeNumbers(indexed)
         combo = {str(label): [indexed, suk, suk2]}
         l.append(combo)
     data.saveData2json(name, l)
     return l
 
+def removeNumbers(sudoku):
+    size = len(sudoku)
+    for i in range(size):
+        for j in range(size):
+            if isinstance(sudoku[i][j],str):
+                sudoku[i][j] = "empty"
+
 def replaceWithRandomIndex(sudoku, subsets, convertNumber=None):
     size = len(sudoku)**2
     if convertNumber:
         nonconvert = size - convertNumber
+    else:
+        nonconvert = size
     a = list()
     for row in sudoku:
         b = list()
@@ -40,7 +61,10 @@ def replaceWithRandomIndex(sudoku, subsets, convertNumber=None):
                 nonconvert-=1
             else:
                 if not convertNumber == None:
-                    if nonconvert > 0:
+                    if convertNumber > 0:
+                        b.append(random.choice(subsets[x - 1]))
+                        convertNumber -= 1
+                    elif nonconvert > 0:
                         r = random.randint(0, nonconvert)
                         if r or convertNumber <= 0:
                             b.append(str(x))
@@ -48,9 +72,6 @@ def replaceWithRandomIndex(sudoku, subsets, convertNumber=None):
                         else:
                             b.append(random.choice(subsets[x - 1]))
                             convertNumber -= 1
-                    elif convertNumber > 0:
-                        b.append(random.choice(subsets[x - 1]))
-                        convertNumber -= 1
                     else:
                         b.append(str(x))
                 else:

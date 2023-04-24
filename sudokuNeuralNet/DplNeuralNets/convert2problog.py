@@ -52,18 +52,9 @@ class MNISTImages(Mapping[Term, torch.Tensor]):
 
 class SudokuDataset(Dataset):
 
-    def __init__(self, subset):
-        self.subset = "train"
-        if subset == "train":
-            self.dataset = open_dataset('train4x4Image1000')
-        if subset == "test1":
-            self.dataset = open_dataset('test100exemples6fl1')
-        if subset == "test2":
-            self.dataset = open_dataset('test100exemples6fl2')
-        if subset == "test3":
-            self.dataset = open_dataset('test100exemples6fl3')
-        if subset == "test4":
-            self.dataset = open_dataset('test100exemples6fl4')
+    def __init__(self, subset, open_file):
+        self.subset = "train" #altijd train omdat alle sudoku's train indexen bevat
+        self.dataset = open_dataset(open_file)
 
     def __len__(self):
         return len(self.dataset)
