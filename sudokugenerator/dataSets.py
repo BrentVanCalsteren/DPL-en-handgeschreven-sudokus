@@ -28,7 +28,7 @@ def saveData2json(name, data):
     jsonFile.close()
 
 def open_json(name):
-    return json.loads(open(name + ".json", "r").read())
+    return json.loads(open("C:/Users/brent/git/SolveWrittenSudoku/sudokuNeuralNet/sdata/"+ name + ".json", "r").read())
 
 """
 Global DataSets
@@ -46,7 +46,7 @@ global datasets; datasets = {
 
 
 global label_indexes; label_indexes = {
-    "train": open_json("C:/Users/brent/git/SolveWrittenSudoku/sudokuNeuralNet/sdata/trainIndex"),
+    "train": open_json("trainIndex"),
 }
 
 #global sudoku_datasets; sudoku_datasets = {

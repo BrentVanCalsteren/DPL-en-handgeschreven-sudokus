@@ -169,3 +169,6 @@ def saveTrainData2json(data, name):
     jsonFile = open("data/" + name + ".json", "w")
     jsonFile.write(jsonStr)
     jsonFile.close()
+
+def opendata(name):
+    return json.loads(open( "data/" + name + ".json", "r").read())

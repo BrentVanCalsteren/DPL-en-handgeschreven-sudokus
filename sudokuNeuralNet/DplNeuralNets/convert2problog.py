@@ -2,7 +2,7 @@ import json
 import random
 from typing import Mapping, Iterator
 import torch
-from problog.logic import Term, Constant, list2term, term2list
+from problog.logic import Term, Constant, list2term, term2list, Var
 from deepproblog.dataset import Dataset
 from deepproblog.query import Query
 from sudokuNeuralNet.NormalNeuralNets import dataSets
@@ -14,11 +14,12 @@ def open_dataset(name):
     return json.loads(open(f'{filepath}\\{name}.json', "r").read())
 
 def convert2TermOrConstant(suk, subset):
+    size = len(suk)
     subs = dict()
     t = []
-    for x in range(4):
+    for x in range(size):
         t2 = []
-        for y in range(4):
+        for y in range(size):
             if suk[x][y] == 'empty':
                 t2.append(Term('empty'))
             elif isinstance(suk[x][y], str):
@@ -68,6 +69,7 @@ class SudokuDataset(Dataset):
         solved = list2term([list2term([convert2VarOrConstant(x) for x in row]) for row in sudokuAndSolved[2]])
         imagesuk = convert2TermOrConstant(sudokuAndSolved[0], self.subset)
 
+        #term = Term('checkValidSudoku', imagesuk, Var("Out"))
         term = Term('checkValidSudoku', imagesuk)
         p = float(label == 'True')
         return Query(term, p=p)

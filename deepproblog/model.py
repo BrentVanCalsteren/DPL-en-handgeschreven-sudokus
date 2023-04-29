@@ -94,6 +94,7 @@ class Model(object):
                     evaluations[net_name].append(inputs)
         for net in evaluations:
             network = self.networks[str(net)]
+            #here get's output mnist network :)
             out = network([term2list(x, False) for x in evaluations[net]])
             for i, k in enumerate(evaluations[net]):
                 if network.det:

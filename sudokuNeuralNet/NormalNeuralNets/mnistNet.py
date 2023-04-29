@@ -72,8 +72,9 @@ class mnistNet(neuralNet):
                 maxvalue = val
         return index
 
-    def get_accuracy(self, name ="test100-16-4x4"):
-        dset = self.open_dataset(name)
+    def get_accuracy(self, name ="test100-16-4x4",dset=None):
+        if not dset:
+            dset = self.open_dataset(name)
         total = 0
         correct = 0
         for ddata in dset:

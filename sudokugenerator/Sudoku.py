@@ -86,13 +86,16 @@ class Sudoku:
             b = list()
             for x in row:
                 if emptys > 0:
-                    bol, x = Sudoku.emptyOrNot(x)
-                    if bol:
-                        emptys-=1
+                    if x.value != 0:
+                        bol, x = Sudoku.emptyOrNot(x)
+                        if bol:
+                            emptys-=1
                 elif emptys < 0:
                     bol, x = Sudoku.emptyOrNot(x)
                 b.append(x)
             a.append(b)
+        if(emptys>0):
+            a = sudoku.generateRandomEmptys(sudoku, emptys)
         return a
     @staticmethod
     def invalidOrNot(x, size):
