@@ -18,16 +18,14 @@ net.optimizer = torch.optim.Adam(network.parameters(), lr=1e-3)
 model = Model("checkvalidsudokuNoPref9x9.pl", [net])
 #set engine: heuristic opties zijn ApproximateEngine.geometric_mean / ApproximateEngine.ucs
 #exploration kan ervoor zorgen sneller leren, maar langer duren voor vinden oplossing
-model.set_engine(ApproximateEngine(model,1, ApproximateEngine.geometric_mean, exploration=False))
+model.set_engine(ApproximateEngine(model, k=1,heuristic=ApproximateEngine.geometric_mean,ignore_timeout=True,exploration=False),sdd_auto_gc=True)
 model.add_tensor_source("train", MNISTImages("train"))
 model.add_tensor_source("test", MNISTImages("test"))
-#voor werken met pretrained net
-# network.load_state_dict(torch.load("C:/Users/brent/git/SolveWrittenSudoku/sudokuNeuralNet/DplNeuralNets/snapshot/test_model_ex.pth"))
 
 def train_net():
     for i in range(eval_itertion):
         # load dataset
-        trainset = dataset_name + f'_eval{i}'
+        trainset = dataset_name #+ f'_eval{i}'
         dataset = SudokuDataset("train", trainset)
         loader = DataLoader(dataset, 1, False)
         # Train the model
@@ -48,13 +46,13 @@ def train_net():
 def solve_querries():
     for i in range(eval_itertion):
         # load dataset
-        trainset = dataset_name + f'_eval{i}'
+        trainset = dataset_name #+ f'_eval{i}'
         dataset = SudokuDataset("train", trainset)
         # eval the model
         model.eval()
         start = time.time()
         for i, query in enumerate(dataset.to_queries()):
-            if i > 4: #hoeveel queries ge wilt checken
+            if i > 2: #hoeveel queries ge wilt checken
                 break
             result = model.solve([query])
             print(result[0])
@@ -65,11 +63,12 @@ def solve_querries():
     saveTrainData2json(data_list, savefile_name)
 
 
-eval_itertion = 5
-images = 0
+eval_itertion = 1
+images = 50
 data_list = list()
-testdata = SudokuDataset("test","test4x4_50sudokus")
+testdata = SudokuDataset("test","test9x9_50sudokus")
 eval_on_single_image = mnistNet(lr=1e-04, epoch=1, data_set='test4x4_All_Images') #moet niet aangepast worden
-dataset_name = f"train9x9" #temp
-savefile_name = f"train9x9"#temp
-train_net()
+dataset_name = f'query_9x9_50sudokus_{images}images'
+savefile_name = f'query_9x9_50sudokus_{images}images_trained'
+load_in_model(network,f"9_mnist90+")
+solve_querries()

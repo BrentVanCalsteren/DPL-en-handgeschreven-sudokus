@@ -48,7 +48,7 @@ def train_net():
 def solve_querries():
     for i in range(eval_itertion):
         # load dataset
-        trainset = dataset_name + f'_eval{i}'
+        trainset = dataset_name #+ f'_eval{i}'
         dataset = SudokuDataset("train", trainset)
         # eval the model
         model.eval()
@@ -70,9 +70,9 @@ images = 0
 data_list = list()
 testdata = SudokuDataset("test","test4x4_50sudokus")
 eval_on_single_image = mnistNet(lr=1e-04, epoch=1, data_set='test4x4_All_Images') #moet niet aangepast worden
-dataset_name = f"train9x9" #temp
-savefile_name = f"train9x9"#temp
-train_net()
+dataset_name = f'query_9x9_50sudokus_{images}images'
+savefile_name = f'query_9x9_50sudokus_{images}images'
+solve_querries()
 
 
 

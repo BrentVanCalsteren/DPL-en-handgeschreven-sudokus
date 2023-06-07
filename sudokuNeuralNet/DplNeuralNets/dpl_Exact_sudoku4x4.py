@@ -20,7 +20,7 @@ net = Network(network, "mnist_net", batching=True)
 net.optimizer = torch.optim.Adam(network.parameters(), lr=1e-3)
 
 model = Model("checkvalidsudokuNoPref.pl", [net])
-model.set_engine(ExactEngine(model))
+model.set_engine(ExactEngine(model),sdd_auto_gc=True)
 model.add_tensor_source("train", MNISTImages("train"))
 model.add_tensor_source("test", MNISTImages("test"))
 
@@ -64,14 +64,21 @@ def solve_querries():
 
     saveTrainData2json(data_list, savefile_name)
 
+def check_circle_permutation():
+    image_acc1 = eval_on_single_image.get_accuracy(dset=eval_on_single_image.dataset,offset=0)
+    image_acc2 = eval_on_single_image.get_accuracy(dset=eval_on_single_image.dataset,offset=1)
+    image_acc3 = eval_on_single_image.get_accuracy(dset=eval_on_single_image.dataset,offset=2)
+    image_acc4 = eval_on_single_image.get_accuracy(dset=eval_on_single_image.dataset,offset=3)
+    saveTrainData2json([image_acc1,image_acc2,image_acc3,image_acc4], f"offset_acc{images}_part2")
 
 eval_itertion = 5
-images = 0
+images = 2
 data_list = list()
 testdata = SudokuDataset("test","test4x4_50sudokus")
 eval_on_single_image = mnistNet(lr=1e-04, epoch=1, data_set='test4x4_All_Images')
-dataset_name = f"train4x4_50sudokus_with_numbers&NoNegs"
-savefile_name = f"train4x4_with_NoNegs"
+dataset_name = f'train4x4_50sudokus_{images}images'
+savefile_name = f"train4x4_{images}images_part2"
+load_in_model(eval_on_single_image.model,f"train4x4_{images}images_part2")
 train_net()
 
 

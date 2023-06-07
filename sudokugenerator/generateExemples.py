@@ -16,11 +16,13 @@ def main():
     #"""
     size = 4
     eval_itertion = 5
-    images = 5
-    empty = 5
+    images = 13
+    val = 3
+    #for images in range(15):
+    empty = 16 - images - val
     for i in range(eval_itertion):
-        trainset = f'train4x4_50sudokus_with_numbers&NoNegs_eval{i}'
-        generate(amount=50, size=size, convert_number=images,emptys=empty, onlyTrue=True, withEmptys=True, name=trainset)
+        trainset = f'train4x4_10sudokus_3val_{images}images_eval{i}'
+        generate(amount=10, size=size, convert_number=images,emptys=empty, onlyTrue=True, withEmptys=True, name=trainset)
     """#"""
 
 def generate(amount=10,size=9, name="temp", onlyTrue=False,withEmptys=True, convert_number=None, emptys=-1):

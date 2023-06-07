@@ -72,7 +72,7 @@ class mnistNet(neuralNet):
                 maxvalue = val
         return index
 
-    def get_accuracy(self, name ="test100-16-4x4",dset=None):
+    def get_accuracy(self, name ="test9x9_50sudokus_81images",dset=None,offset=0):
         if not dset:
             dset = self.open_dataset(name)
         total = 0
@@ -87,7 +87,10 @@ class mnistNet(neuralNet):
                     out = self.convertList2Value(output.detach().numpy())
                     comp = target[k][l]
                     total += 1
-                    if int(out) == int(comp):
+                    if out+offset > self.sqlength:
+                        if int(out + offset-self.sqlength) == int(comp):
+                            correct += 1
+                    elif int(out+offset) == int(comp):
                         correct += 1
         accu = correct / total
         self.accu.append(accu)
